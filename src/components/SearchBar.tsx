@@ -1,13 +1,16 @@
-"use client";
+import Form from "next/form";
+import { Input } from "./ui/input";
 
-import { Button } from "./ui/button";
-
-const SearchBar = () => {
+const SearchBar = ({ query }: { query?: string }) => {
   return (
-    <div className="w-full flex-center">
-      <div>Hello</div>
-      <Button className="text-lg">Create New</Button>
-    </div>
+    <Form action="/" className="w-full flex-center">
+      <Input
+        name="query"
+        defaultValue={query}
+        placeholder="Search Notes"
+        className="w-96"
+      />
+    </Form>
   );
 };
 export default SearchBar;
