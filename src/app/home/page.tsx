@@ -4,7 +4,13 @@ import { Button } from "@/components/ui/button";
 import { collectionData } from "@/data/collectionData";
 import { Plus } from "lucide-react";
 
-const Page = () => {
+const Page = async ({
+  searchParams,
+}: {
+  searchParams: Promise<{ query?: string }>;
+}) => {
+  const query = (await searchParams).query;
+  const stringQuery = query ? query.toLocaleLowerCase() : "";
   return (
     <div className="p-6">
       {/* Navbar */}
@@ -27,13 +33,20 @@ const Page = () => {
       </div>
 
       {/* Searchbar */}
-      <SearchBar />
+      <SearchBar query={query} />
 
       {/* Content Page */}
       <div className="">
-        {collectionData.map((collection) => {
-          return <CollectionCard key={collection.id} collection={collection} />;
-        })}
+        {collectionData
+          .filter((collection) =>
+            collection.name.toLocaleLowerCase().includes(stringQuery)
+          )
+          .map((collection) => {
+            console.log(query, collection.name);
+            return (
+              <CollectionCard key={collection.id} collection={collection} />
+            );
+          })}
       </div>
     </div>
   );
