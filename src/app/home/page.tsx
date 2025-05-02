@@ -1,9 +1,9 @@
 const Page = () => {
   return (
     <div className="">
-      {/* Header div */}
-      <div className="">
-        <h1>Your Collections</h1>
+      {/* Header Div */}
+      <div className="w-full p-24">
+        <h1 className="text-6xl font-bold">Your Collections</h1>
       </div>
     </div>
   );
