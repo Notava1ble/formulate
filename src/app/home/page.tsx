@@ -2,6 +2,7 @@ import CollectionCard from "@/components/CollectionCard";
 import SearchBar from "@/components/SearchBar";
 import { Button } from "@/components/ui/button";
 import { collectionData } from "@/data/collectionData";
+import { userCollectionData } from "@/data/userCollectionData";
 import { Plus } from "lucide-react";
 
 const Page = async ({
@@ -37,17 +38,37 @@ const Page = async ({
         {/* Searchbar */}
         <SearchBar query={query} />
 
+        {/* Premade Collections */}
+        <div className="flex-col-center mt-20">
+          <div className="w-full grid grid-cols-2 gap-8 mt-16 px-4">
+            {userCollectionData
+              .filter((collection) =>
+                collection.name.toLocaleLowerCase().includes(stringQuery)
+              )
+              .map((collection) => {
+                return (
+                  <CollectionCard key={collection.id} collection={collection} />
+                );
+              })}
+          </div>
+        </div>
+
         {/* Content Page */}
-        <div className="w-full grid grid-cols-2 gap-8 mt-16 px-4">
-          {collectionData
-            .filter((collection) =>
-              collection.name.toLocaleLowerCase().includes(stringQuery)
-            )
-            .map((collection) => {
-              return (
-                <CollectionCard key={collection.id} collection={collection} />
-              );
-            })}
+        <div className="flex-col-center mt-36">
+          <h2 className="text-2xl font-poppins font-medium">
+            ---Look out some premade Collections---
+          </h2>
+          <div className="w-full grid grid-cols-2 gap-8 mt-16 px-4">
+            {collectionData
+              .filter((collection) =>
+                collection.name.toLocaleLowerCase().includes(stringQuery)
+              )
+              .map((collection) => {
+                return (
+                  <CollectionCard key={collection.id} collection={collection} />
+                );
+              })}
+          </div>
         </div>
       </div>
     </>
