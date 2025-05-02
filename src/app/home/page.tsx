@@ -28,7 +28,7 @@ const Page = async ({
       </div>
       <div className="p-6">
         {/* Header Div */}
-        <div className="w-full flex-center p-24">
+        <div className="w-full flex-center p-24 pt-32">
           <h1 className="text-6xl font-semibold font-poppins">
             Your Collections
           </h1>
