@@ -1,5 +1,7 @@
+import CollectionCard from "@/components/CollectionCard";
 import SearchBar from "@/components/SearchBar";
 import { Button } from "@/components/ui/button";
+import { collectionData } from "@/data/collectionData";
 import { Plus } from "lucide-react";
 
 const Page = () => {
@@ -28,6 +30,11 @@ const Page = () => {
       <SearchBar />
 
       {/* Content Page */}
+      <div className="">
+        {collectionData.map((collection) => {
+          return <CollectionCard key={collection.id} collection={collection} />;
+        })}
+      </div>
     </div>
   );
 };
