@@ -42,7 +42,6 @@ const Page = async ({
             collection.name.toLocaleLowerCase().includes(stringQuery)
           )
           .map((collection) => {
-            console.log(query, collection.name);
             return (
               <CollectionCard key={collection.id} collection={collection} />
             );
