@@ -194,4 +194,118 @@ export const collectionData: CollectionData = [
       },
     ],
   },
+  {
+    id: 6,
+    name: "Biology",
+    subject: "Biology",
+    icon: Dna,
+    notes: [
+      {
+        id: 1,
+        name: "Cell Biology",
+        content:
+          "Structure and function of prokaryotic and eukaryotic cells, organelles, and cell membrane transport.",
+      },
+      {
+        id: 2,
+        name: "Genetics",
+        content:
+          "Principles of heredity, DNA structure and replication, gene expression (transcription, translation), and Mendelian genetics.",
+      },
+      {
+        id: 3,
+        name: "Evolution",
+        content:
+          "Theory of evolution by natural selection, evidence for evolution, speciation, and population genetics.",
+      },
+      {
+        id: 4,
+        name: "Ecology",
+        content:
+          "Interactions between organisms and their environment, ecosystems, population dynamics, and biomes.",
+      },
+      {
+        id: 5,
+        name: "Human Physiology",
+        content:
+          "Study of the structure and function of major organ systems in humans, including circulatory, respiratory, and nervous systems.",
+      },
+    ],
+  },
+  {
+    id: 7,
+    name: "History",
+    subject: "History",
+    icon: Book,
+    notes: [
+      {
+        id: 1,
+        name: "Ancient Civilizations",
+        content:
+          "Development of early human societies, river valley civilizations (Mesopotamia, Egypt, Indus Valley, China), and classical empires (Greece, Rome).",
+      },
+      {
+        id: 2,
+        name: "Medieval Period",
+        content:
+          "Fall of the Western Roman Empire, rise of Byzantium, feudalism in Europe, the Crusades, and the Mongol Empire.",
+      },
+      {
+        id: 3,
+        name: "Renaissance and Reformation",
+        content:
+          "Cultural rebirth in Europe, exploration and discovery, the Reformation, and the Scientific Revolution.",
+      },
+      {
+        id: 4,
+        name: "Age of Revolutions & WWI",
+        content:
+          "The American and French Revolutions, the Industrial Revolution, rise of nationalism, imperialism, and World War I.",
+      },
+      {
+        id: 5,
+        name: "Modern World History",
+        content:
+          "The interwar period, World War II, the Cold War, decolonization, and contemporary global issues.",
+      },
+    ],
+  },
+  {
+    id: 8,
+    name: "History",
+    subject: "History",
+    icon: Book,
+    notes: [
+      {
+        id: 1,
+        name: "Ancient Civilizations",
+        content:
+          "Development of early human societies, river valley civilizations (Mesopotamia, Egypt, Indus Valley, China), and classical empires (Greece, Rome).",
+      },
+      {
+        id: 2,
+        name: "Medieval Period",
+        content:
+          "Fall of the Western Roman Empire, rise of Byzantium, feudalism in Europe, the Crusades, and the Mongol Empire.",
+      },
+      {
+        id: 3,
+        name: "Renaissance and Reformation",
+        content:
+          "Cultural rebirth in Europe, exploration and discovery, the Reformation, and the Scientific Revolution.",
+      },
+      {
+        id: 4,
+        name: "Age of Revolutions & WWI",
+        content:
+          "The American and French Revolutions, the Industrial Revolution, rise of nationalism, imperialism, and World War I.",
+      },
+      {
+        id: 5,
+        name: "Modern World History",
+        content:
+          "The interwar period, World War II, the Cold War, decolonization, and contemporary global issues.",
+      },
+    ],
+  },
 ];
