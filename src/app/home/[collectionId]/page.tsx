@@ -30,7 +30,7 @@ export default async function Page({
           </h1>
         </div>
         {/* Premade Collections */}
-        <div className="flex-col-center mt-16">
+        <div className="flex-col-center mt-12">
           <div className="w-full grid grid-cols-2 gap-8 mt-16 px-4">
             {collection.notes.map((note) => {
               return (

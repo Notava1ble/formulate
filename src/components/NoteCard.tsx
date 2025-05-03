@@ -14,7 +14,7 @@ const NoteCard = ({
       </div>
       <div>
         <h1 className="text-3xl font-poppins font-bold">{note.name}</h1>
-        <p>{note.content.substring(0, 50)}</p>
+        <p>{note.content.substring(0, 50) + "..."}</p>
       </div>
     </div>
   );
