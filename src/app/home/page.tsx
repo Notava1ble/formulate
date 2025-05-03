@@ -1,9 +1,8 @@
 import CollectionCard from "@/components/CollectionCard";
+import Navbar from "@/components/Navbar";
 import SearchBar from "@/components/SearchBar";
-import { Button } from "@/components/ui/button";
 import { collectionData } from "@/data/collectionData";
 import { userCollectionData } from "@/data/userCollectionData";
-import { Plus } from "lucide-react";
 
 const Page = async ({
   searchParams,
@@ -15,18 +14,7 @@ const Page = async ({
   return (
     <>
       {/* Navbar */}
-      <div className="fixed pt-6 px-4 pb-6 w-full bg-black/30 backdrop-blur-lg border-b-1">
-        <div className="w-full flex justify-between items-center">
-          <h1 className="text-lg font-poppins font-bold">Formulate</h1>
-          <div className="flex-center gap-6">
-            <Button variant="ghost">Login</Button>
-            <Button>
-              <Plus />
-              Create
-            </Button>
-          </div>
-        </div>
-      </div>
+      <Navbar />
       <div className="p-6">
         {/* Header Div */}
         <div className="w-full flex-center p-24 pt-32">
