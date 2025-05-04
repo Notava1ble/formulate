@@ -1,4 +1,5 @@
 import { Atom, Beaker, Book, Calculator, Dna, LucideIcon } from "lucide-react";
+import { promises as fs } from "fs";
 
 export interface NoteType {
   id: number;
@@ -21,7 +22,7 @@ export const collectionData: CollectionData = [
     id: 1,
     name: "Mathematics",
     subject: "Mathematics",
-    icon: Calculator, // Or potentially an imported icon component/definition
+    icon: Calculator,
     notes: [
       {
         id: 1,
@@ -32,14 +33,18 @@ export const collectionData: CollectionData = [
       {
         id: 2,
         name: "Trigonometry",
-        content:
-          "Study of triangles, circles, angles, and relationships between sides and angles. Key formulas: sine, cosine, tangent.",
+        content: await fs.readFile(
+          process.cwd() + "/src/data/markdown/Trigonometry.md",
+          "utf-8"
+        ),
       },
       {
         id: 3,
         name: "Calculus Basics",
-        content:
-          "Introduction to limits, derivatives, and integrals. Rules for differentiation and integration.",
+        content: await fs.readFile(
+          process.cwd() + "/src/data/markdown/Calculus Basics.md",
+          "utf-8"
+        ),
       },
       {
         id: 4,

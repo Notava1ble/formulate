@@ -30,12 +30,6 @@ export default async function Page({
 
   if (!note) redirect("/not-found");
 
-  const test_markdown = `The equation 
-  $$ 
-  x^2 -1 = 0 
-  $$
-  is a quadratic equation`;
-
   return (
     <div>
       <Navbar />
@@ -48,7 +42,7 @@ export default async function Page({
           remarkPlugins={[remarkMath, remarkGfm]}
           rehypePlugins={[rehypeKatex]}
         >
-          {test_markdown}
+          {note.content}
         </Markdown>
       </div>
     </div>
