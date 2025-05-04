@@ -5,7 +5,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <main className="relative">{children}</main>
+      <main className="relative w-full">{children}</main>
     </SidebarProvider>
   );
 }
