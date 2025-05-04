@@ -34,7 +34,7 @@ const CollectionSidebarItem = ({
             {collection.notes.map((note) => (
               <SidebarMenuSubItem key={note.id}>
                 <SidebarMenuSubButton asChild>
-                  <Link href={`home/${collection.id}/${note.id}`}>
+                  <Link href={`/home/${collection.id}/${note.id}`}>
                     <span>{note.name}</span>
                   </Link>
                 </SidebarMenuSubButton>
