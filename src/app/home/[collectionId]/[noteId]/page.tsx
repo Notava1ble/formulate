@@ -5,6 +5,12 @@ import { userCollectionData } from "@/data/userCollectionData";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
 
+import Markdown from "react-markdown";
+import rehypeKatex from "rehype-katex";
+import remarkMath from "remark-math";
+import remarkGfm from "remark-gfm";
+import "katex/dist/katex.min.css";
+
 export default async function Page({
   params,
 }: {
@@ -24,6 +30,12 @@ export default async function Page({
 
   if (!note) redirect("/not-found");
 
+  const test_markdown = `The equation 
+  $$ 
+  x^2 -1 = 0 
+  $$
+  is a quadratic equation`;
+
   return (
     <div>
       <Navbar />
@@ -32,7 +44,12 @@ export default async function Page({
         <Link href={`/home/${collection.id}`} className="no-underline">
           <sub>{collection.name}</sub>
         </Link>
-        <p>{note.content}</p>
+        <Markdown
+          remarkPlugins={[remarkMath, remarkGfm]}
+          rehypePlugins={[rehypeKatex]}
+        >
+          {test_markdown}
+        </Markdown>
       </div>
     </div>
   );
