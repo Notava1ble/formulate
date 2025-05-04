@@ -6,26 +6,12 @@ import {
   GraduationCap,
   Home,
   Lightbulb,
-  LucideIcon,
   Plane,
   Utensils,
   Wheat,
 } from "lucide-react";
 
-export interface NoteType {
-  id: number;
-  name: string;
-  content: string;
-}
-
-export interface CollectionType {
-  id: number;
-  name: string;
-  subject: string;
-  icon: LucideIcon;
-  notes: Array<NoteType>;
-}
-type CollectionData = Array<CollectionType>;
+import { CollectionData } from "./collectionData";
 
 export const userCollectionData: CollectionData = [
   {

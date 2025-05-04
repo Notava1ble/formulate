@@ -5,22 +5,34 @@ import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarSeparator,
 } from "@/components/ui/sidebar";
+
 import { collectionData } from "@/data/collectionData";
 import { userCollectionData } from "@/data/userCollectionData";
+import CollectionSidebarItem from "./CollectionSidebarItem";
+import { House } from "lucide-react";
 import Link from "next/link";
 
 export default function AppSidebar() {
   return (
-    <Sidebar
-      variant="floating"
-      collapsible="icon"
-      className="overflow-x-hidden"
-    >
+    <Sidebar variant="floating" collapsible="offcanvas">
+      <SidebarHeader>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild>
+              <Link href={"/home"}>
+                Home
+                <House className="ml-auto" />
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarHeader>
       <SidebarContent>
         {/* USER COLLECTIONS */}
         <SidebarGroup>
@@ -28,14 +40,10 @@ export default function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               {userCollectionData.map((collection) => (
-                <SidebarMenuItem key={collection.id}>
-                  <SidebarMenuButton asChild>
-                    <Link href={`/home/${collection.id}`}>
-                      <collection.icon />
-                      <span>{collection.name}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
+                <CollectionSidebarItem
+                  key={collection.id}
+                  collection={collection}
+                />
               ))}
             </SidebarMenu>
           </SidebarGroupContent>
@@ -49,14 +57,10 @@ export default function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               {collectionData.map((collection) => (
-                <SidebarMenuItem key={collection.id}>
-                  <SidebarMenuButton asChild>
-                    <Link href={`/home/${collection.id}`}>
-                      <collection.icon />
-                      <span>{collection.name}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
+                <CollectionSidebarItem
+                  key={collection.id}
+                  collection={collection}
+                />
               ))}
             </SidebarMenu>
           </SidebarGroupContent>
