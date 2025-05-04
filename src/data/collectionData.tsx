@@ -13,7 +13,8 @@ export interface CollectionType {
   icon: LucideIcon;
   notes: Array<NoteType>;
 }
-type CollectionData = Array<CollectionType>;
+
+export type CollectionData = Array<CollectionType>;
 
 export const collectionData: CollectionData = [
   {
