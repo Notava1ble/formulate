@@ -31,11 +31,11 @@ const CollectionSidebarItem = ({
         </CollapsibleTrigger>
         <CollapsibleContent>
           <SidebarMenuSub>
-            {collection.notes.map((note) => (
-              <SidebarMenuSubItem key={note.id}>
+            {collection.subCollection.map((subCollection) => (
+              <SidebarMenuSubItem key={subCollection.id}>
                 <SidebarMenuSubButton asChild>
-                  <Link href={`/home/${collection.id}/${note.id}`}>
-                    <span>{note.name}</span>
+                  <Link href={`/home/${collection.id}/${subCollection.id}`}>
+                    <span>{subCollection.name}</span>
                   </Link>
                 </SidebarMenuSubButton>
               </SidebarMenuSubItem>

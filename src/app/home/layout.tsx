@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 
 import { SidebarProvider } from "@/components/ui/sidebar";
 import AppSidebar from "@/components/AppSidebar";
+import Navbar from "@/components/Navbar";
 
 export default async function Layout({
   children,
@@ -15,7 +16,10 @@ export default async function Layout({
   return (
     <SidebarProvider defaultOpen={defaultOpen}>
       <AppSidebar />
-      <main className="relative w-full">{children}</main>
+      <main className="relative w-full overflow-auto">
+        <Navbar />
+        {children}
+      </main>
     </SidebarProvider>
   );
 }

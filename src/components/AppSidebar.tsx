@@ -9,11 +9,9 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarSeparator,
 } from "@/components/ui/sidebar";
 
 import { collectionData } from "@/data/collectionData";
-import { userCollectionData } from "@/data/userCollectionData";
 import CollectionSidebarItem from "./CollectionSidebarItem";
 import { House } from "lucide-react";
 import Link from "next/link";
@@ -35,7 +33,7 @@ export default function AppSidebar() {
       </SidebarHeader>
       <SidebarContent>
         {/* USER COLLECTIONS */}
-        <SidebarGroup>
+        {/* <SidebarGroup>
           <SidebarGroupLabel>Your Collections</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
@@ -49,7 +47,7 @@ export default function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        <SidebarSeparator />
+        <SidebarSeparator /> */}
 
         {/* PREMADE COLLECTION */}
         <SidebarGroup>

@@ -1,10 +1,16 @@
 import Link from "next/link";
-import type { CollectionType } from "../data/collectionData";
+import type { CollectionType, SubCollectionType } from "../data/collectionData";
 
-const CollectionCard = ({ collection }: { collection: CollectionType }) => {
+const CollectionCard = ({
+  collection,
+  href,
+}: {
+  collection: CollectionType | SubCollectionType;
+  href: string;
+}) => {
   return (
     <Link
-      href={`/home/${collection.id}`}
+      href={href}
       className="bg-zinc-800 rounded-md p-6 py-8 flex justify-start items-center gap-8 hover:scale-102 transition-all"
     >
       <div>
@@ -12,7 +18,6 @@ const CollectionCard = ({ collection }: { collection: CollectionType }) => {
       </div>
       <div>
         <h1 className="text-3xl font-poppins font-bold">{collection.name}</h1>
-        <p>{collection.subject}</p>
       </div>
     </Link>
   );

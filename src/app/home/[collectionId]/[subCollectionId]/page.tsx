@@ -1,24 +1,25 @@
 import { redirect } from "next/navigation";
 
 import { collectionData } from "@/data/collectionData";
-import CollectionCard from "@/components/CollectionCard";
+import NoteCard from "@/components/NoteCard";
 
 export default async function Page({
   params,
 }: {
-  params: Promise<{ collectionId: string }>;
+  params: Promise<{ collectionId: string; subCollectionId: string }>;
 }) {
-  const { collectionId } = await params;
+  const { collectionId, subCollectionId } = await params;
   const intCollectionId = parseInt(collectionId);
-
-  // const collection =
-  //   intCollectionId < 100
-  //     ? collectionData.find((col) => col.id == intCollectionId)
-  //     : userCollectionData.find((col) => col.id == intCollectionId);
 
   const collection = collectionData.find((col) => col.id == intCollectionId);
 
   if (!collection) redirect("/not-found");
+
+  const subCollection = collection.subCollection.find(
+    (subCollection) => subCollection.id == parseInt(subCollectionId)
+  );
+
+  if (!subCollection) redirect("/not-found");
 
   return (
     <div className="p-6">
@@ -29,12 +30,13 @@ export default async function Page({
       </div>
       <div className="flex-col-center mt-12">
         <div className="w-full grid grid-cols-2 gap-8 mt-16 px-4">
-          {collection.subCollection.map((subC) => {
+          {subCollection.notes.map((note) => {
             return (
-              <CollectionCard
-                key={subC.id}
-                collection={subC}
-                href={`/home/${collection.id}/${subC.id}`}
+              <NoteCard
+                key={note.id}
+                collection={subCollection}
+                note={note}
+                href={`/home/${collection.id}/${subCollection.id}/${note.id}`}
               />
             );
           })}
