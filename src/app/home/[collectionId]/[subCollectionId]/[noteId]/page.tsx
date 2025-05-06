@@ -9,6 +9,7 @@ import remarkMath from "remark-math";
 import remarkGfm from "remark-gfm";
 import "katex/dist/katex.min.css";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
+import { ChevronRight } from "lucide-react";
 
 export default async function Page({
   params,
@@ -38,10 +39,23 @@ export default async function Page({
 
   return (
     <div className="prose prose-invert prose-lg mx-auto pt-32 pb-64 overflow-y-auto">
-      <h1>{note.name}</h1>
-      <Link href={`/home/${collection.id}`} className="no-underline">
-        <sub>{collection.name}</sub>
-      </Link>
+      <h1 className="font-poppins">{note.name}</h1>
+      <sub className="w-[40%] flex justify-between items-center">
+        <Link
+          href={`/home/${collection.id}`}
+          className="no-underline font-normal hover:font-semibold"
+        >
+          {collection.name}
+        </Link>
+        <ChevronRight />{" "}
+        <Link
+          href={`/home/${collection.id}/${subCollection.id}`}
+          className="no-underline font-normal hover:font-semibold"
+        >
+          {subCollection.name}
+        </Link>
+        <ChevronRight /> <span>{note.name}</span>
+      </sub>
       <h2>Theory</h2>
       <p>{note.theory}</p>
       <h2>Formulas</h2>
