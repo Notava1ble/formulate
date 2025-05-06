@@ -16,7 +16,7 @@ export default async function Layout({
   return (
     <SidebarProvider defaultOpen={defaultOpen}>
       <AppSidebar />
-      <main className="relative w-full overflow-auto">
+      <main className="relative w-full">
         <Navbar />
         {children}
       </main>

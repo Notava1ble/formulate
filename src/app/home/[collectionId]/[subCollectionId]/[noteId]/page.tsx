@@ -45,21 +45,25 @@ export default async function Page({
       <h2>Theory</h2>
       <p>{note.theory}</p>
       <h2>Formulas</h2>
-      {note.formulas.map((formula, i) => (
-        <Markdown
-          remarkPlugins={[remarkMath, remarkGfm]}
-          rehypePlugins={[rehypeKatex]}
-          key={i}
-        >
-          {`\n$$\n${formula}\n$$\n`}
-        </Markdown>
-      ))}
+      <Markdown
+        remarkPlugins={[remarkMath, remarkGfm]}
+        rehypePlugins={[rehypeKatex]}
+      >
+        {note.formulas.map((formula) => `\n$$\n${formula}\n$$\n`).join("")}
+      </Markdown>
       <h2>Symbol Definitions</h2>
       <Table className="not-prose">
         <TableBody>
           {note.symbols.map((symbol, i) => (
             <TableRow key={i}>
-              <TableCell className="font-medium">{symbol.symbol}</TableCell>
+              <TableCell className="font-medium">
+                <Markdown
+                  remarkPlugins={[remarkMath, remarkGfm]}
+                  rehypePlugins={[rehypeKatex]}
+                >
+                  {`\n$${symbol.symbol}$`}
+                </Markdown>
+              </TableCell>
               <TableCell>{symbol.explanation}</TableCell>
             </TableRow>
           ))}
