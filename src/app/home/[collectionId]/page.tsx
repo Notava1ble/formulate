@@ -11,11 +11,6 @@ export default async function Page({
   const { collectionId } = await params;
   const intCollectionId = parseInt(collectionId);
 
-  // const collection =
-  //   intCollectionId < 100
-  //     ? collectionData.find((col) => col.id == intCollectionId)
-  //     : userCollectionData.find((col) => col.id == intCollectionId);
-
   const collection = collectionData.find((col) => col.id == intCollectionId);
 
   if (!collection) redirect("/not-found");

@@ -21,21 +21,6 @@ const Page = async ({
       {/* Searchbar */}
       <SearchBar query={query} />
 
-      {/* // Premade Collections
-        <div className="flex-col-center mt-20">
-          <div className="w-full grid grid-cols-2 gap-8 mt-16 px-4">
-            {userCollectionData
-              .filter((collection) =>
-                collection.name.toLocaleLowerCase().includes(stringQuery)
-              )
-              .map((collection) => {
-                return (
-                  <CollectionCard key={collection.id} collection={collection} />
-                );
-              })}
-          </div>
-        </div> */}
-
       {/* Content Page */}
       <div className="flex-col-center mt-36">
         <h2 className="text-2xl font-poppins font-medium">

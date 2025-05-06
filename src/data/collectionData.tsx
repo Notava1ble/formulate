@@ -1,3 +1,5 @@
+// GENERATED USING GEMINI 2.5 PRO
+
 import {
   Atom,
   Beaker,
@@ -13,9 +15,6 @@ import {
   Gauge, // Good for Kinetics/Equilibrium
   Waves, // Good for Atomic Structure / Waves
 } from "lucide-react";
-
-// fs import is not needed for the data structure itself
-// import { promises as fs } from "fs";
 
 export interface CollectionType {
   id: number;
@@ -712,24 +711,3 @@ export const collectionData: CollectionDataType = [
     ],
   },
 ];
-
-// Example usage (optional, for verification):
-// function displayData() {
-//   // A simple way to see the structure - real rendering would use a LaTeX library
-//   collectionData.forEach(collection => {
-//       console.log(`Collection: ${collection.name}`);
-//       collection.subCollection.forEach(sub => {
-//          console.log(`  SubCollection: ${sub.name}`);
-//          sub.notes.forEach(note => {
-//              console.log(`    Note: ${note.name}`);
-//              console.log(`      Theory: ${note.theory}`);
-//              console.log(`      Formulas (LaTeX):`);
-//              note.formulas.forEach(f => console.log(`        ${f}`));
-//              console.log(`      Symbols:`);
-//              note.symbols.forEach(s => console.log(`        ${s.symbol}: ${s.explanation}`));
-//          });
-//       });
-//   });
-// }
-// displayData();
-// console.log(JSON.stringify(collectionData, null, 2)); // For raw JSON view
