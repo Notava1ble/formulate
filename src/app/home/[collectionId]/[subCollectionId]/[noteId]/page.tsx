@@ -51,7 +51,7 @@ export default async function Page({
           rehypePlugins={[rehypeKatex]}
           key={i}
         >
-          {`\n$$${formula}$$\n`}
+          {`\n$$\n${formula}\n$$\n`}
         </Markdown>
       ))}
       <h2>Symbol Definitions</h2>
