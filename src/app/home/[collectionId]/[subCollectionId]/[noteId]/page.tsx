@@ -37,7 +37,7 @@ export default async function Page({
   if (!note) redirect("/not-found");
 
   return (
-    <div className="prose prose-invert prose-lg mx-auto pt-36 pb-64 overflow-y-auto">
+    <div className="prose prose-invert prose-lg mx-auto pt-32 pb-64 overflow-y-auto">
       <h1>{note.name}</h1>
       <Link href={`/home/${collection.id}`} className="no-underline">
         <sub>{collection.name}</sub>
@@ -61,7 +61,7 @@ export default async function Page({
                   remarkPlugins={[remarkMath, remarkGfm]}
                   rehypePlugins={[rehypeKatex]}
                 >
-                  {`\n$${symbol.symbol}$`}
+                  {`$${symbol.symbol}$`}
                 </Markdown>
               </TableCell>
               <TableCell>{symbol.explanation}</TableCell>
