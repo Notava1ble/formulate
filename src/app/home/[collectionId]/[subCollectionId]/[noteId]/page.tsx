@@ -63,7 +63,15 @@ export default async function Page({
         remarkPlugins={[remarkMath, remarkGfm]}
         rehypePlugins={[rehypeKatex]}
       >
-        {note.formulas.map((formula) => `\n$$\n${formula}\n$$\n`).join("")}
+        {note.sections
+          .map((section) => {
+            const header = section.sectionName;
+            const formulas = section.formulas
+              .map((formula) => `\n$$\n${formula}\n$$\n`)
+              .join("");
+            return `### ${header}\n${formulas}`;
+          })
+          .join("\n\n")}
       </Markdown>
       <h2>Symbol Definitions</h2>
       <Table className="not-prose">
