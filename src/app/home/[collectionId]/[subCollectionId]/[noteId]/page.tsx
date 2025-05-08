@@ -40,17 +40,17 @@ export default async function Page({
   return (
     <div className="prose prose-invert prose-lg mx-auto pt-32 pb-64 overflow-y-auto">
       <h1 className="font-poppins">{note.name}</h1>
-      <sub className="w-[40%] flex justify-between items-center">
+      <sub className="w-full flex items-center justify-start gap-2">
         <Link
           href={`/home/${collection.id}`}
-          className="no-underline font-normal hover:font-semibold"
+          className="no-underline font-normal opacity-70 hover:opacity-100"
         >
           {collection.name}
         </Link>
         <ChevronRight />{" "}
         <Link
           href={`/home/${collection.id}/${subCollection.id}`}
-          className="no-underline font-normal hover:font-semibold"
+          className="no-underline font-normal opacity-70 hover:opacity-100"
         >
           {subCollection.name}
         </Link>
