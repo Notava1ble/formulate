@@ -4,6 +4,8 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import AppSidebar from "@/components/AppSidebar";
 import Navbar from "@/components/Navbar";
 
+export const revalidate = 60;
+
 export default async function Layout({
   children,
 }: {
