@@ -12,9 +12,10 @@ export default async function Page({
   const { collectionId } = await params;
 
   const collection = await getCollectionById(collectionId);
-  const sub_collections = await getSubCollectionsByCollectionId(collectionId);
 
   if (!collection) redirect("/not-found");
+
+  const sub_collections = await getSubCollectionsByCollectionId(collectionId);
 
   return (
     <div className="p-6">

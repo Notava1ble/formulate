@@ -1,6 +1,5 @@
 import { redirect } from "next/navigation";
 
-import { collectionData } from "@/data/collectionData";
 import Link from "next/link";
 
 import Markdown from "react-markdown";
@@ -10,6 +9,9 @@ import remarkGfm from "remark-gfm";
 import "katex/dist/katex.min.css";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { ChevronRight } from "lucide-react";
+import { getCollectionById } from "@/lib/supabase/collection";
+import { getSubCollectionById } from "@/lib/supabase/subCollection";
+import { getNoteById } from "@/lib/supabase/notes";
 
 export default async function Page({
   params,
@@ -21,19 +23,16 @@ export default async function Page({
   }>;
 }) {
   const { collectionId, subCollectionId, noteId } = await params;
-  const intCollectionId = parseInt(collectionId);
 
-  const collection = collectionData.find((col) => col.id == intCollectionId);
+  const collection = await getCollectionById(collectionId);
 
   if (!collection) redirect("/not-found");
 
-  const subCollection = collection.subCollection.find(
-    (subCollection) => subCollection.id == parseInt(subCollectionId)
-  );
+  const subCollection = await getSubCollectionById(subCollectionId);
 
   if (!subCollection) redirect("/not-found");
 
-  const note = subCollection.notes.find((note) => note.id == parseInt(noteId));
+  const note = await getNoteById(noteId);
 
   if (!note) redirect("/not-found");
 
