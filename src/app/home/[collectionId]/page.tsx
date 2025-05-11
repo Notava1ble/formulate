@@ -11,11 +11,13 @@ export default async function Page({
 }) {
   const { collectionId } = await params;
 
-  const collection = await getCollectionById(collectionId);
+  // Fetch collection and sub_collections in parallel
+  const [collection, sub_collections] = await Promise.all([
+    getCollectionById(collectionId),
+    getSubCollectionsByCollectionId(collectionId),
+  ]);
 
   if (!collection) redirect("/not-found");
-
-  const sub_collections = await getSubCollectionsByCollectionId(collectionId);
 
   return (
     <div className="p-6">

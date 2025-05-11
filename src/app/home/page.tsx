@@ -1,6 +1,6 @@
-import CollectionCard from "@/components/CollectionCard";
 import SearchBar from "@/components/SearchBar";
-import { readCollections } from "@/lib/supabase/collection";
+import { Suspense } from "react";
+import Loading from "./loading";
 
 const Page = async ({
   searchParams,
@@ -8,9 +8,7 @@ const Page = async ({
   searchParams: Promise<{ query?: string }>;
 }) => {
   const query = (await searchParams).query;
-  const stringQuery = query ? query.toLocaleLowerCase() : "";
-
-  const collections = await readCollections();
+  // const stringQuery = query ? query.toLocaleLowerCase() : "";
 
   return (
     <div className="p-6">
@@ -29,22 +27,7 @@ const Page = async ({
         <h2 className="text-2xl font-poppins font-medium">
           ---Look out some premade Collections---
         </h2>
-        <div className="w-full grid grid-cols-2 gap-8 mt-16 px-4">
-          {collections &&
-            collections
-              .filter((collection) =>
-                collection.name.toLocaleLowerCase().includes(stringQuery)
-              )
-              .map((collection) => {
-                return (
-                  <CollectionCard
-                    key={collection.id}
-                    collection={collection}
-                    href={`/home/${collection.id}`}
-                  />
-                );
-              })}
-        </div>
+        <Suspense fallback={<Loading />}></Suspense>
       </div>
     </div>
   );

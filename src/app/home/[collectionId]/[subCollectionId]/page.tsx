@@ -12,13 +12,12 @@ export default async function Page({
 }) {
   const { collectionId, subCollectionId } = await params;
 
-  const collection = await getCollectionById(collectionId);
+  const [collection, sub_collection] = await Promise.all([
+    getCollectionById(collectionId),
+    getSubCollectionById(subCollectionId),
+  ]);
 
-  if (!collection) redirect("/not-found");
-
-  const sub_collection = await getSubCollectionById(subCollectionId);
-
-  if (!sub_collection) redirect("/not-found");
+  if (!collection || !sub_collection) redirect("/not-found");
 
   const notes = await getNotesBySubCollectionId(subCollectionId);
 
@@ -26,7 +25,7 @@ export default async function Page({
     <div className="p-6">
       <div className=" w-full flex-center p-24 pt-32">
         <h1 className="text-6xl font-semibold font-poppins">
-          {collection.name}
+          {sub_collection.name}
         </h1>
       </div>
       <div className="flex-col-center mt-12">

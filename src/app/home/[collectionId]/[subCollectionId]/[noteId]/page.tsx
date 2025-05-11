@@ -24,17 +24,13 @@ export default async function Page({
 }) {
   const { collectionId, subCollectionId, noteId } = await params;
 
-  const collection = await getCollectionById(collectionId);
+  const [collection, sub_collection, note] = await Promise.all([
+    getCollectionById(collectionId),
+    getSubCollectionById(subCollectionId),
+    getNoteById(noteId),
+  ]);
 
-  if (!collection) redirect("/not-found");
-
-  const subCollection = await getSubCollectionById(subCollectionId);
-
-  if (!subCollection) redirect("/not-found");
-
-  const note = await getNoteById(noteId);
-
-  if (!note) redirect("/not-found");
+  if (!collection || !sub_collection || !note) redirect("/not-found");
 
   return (
     <div className="prose prose-invert prose-lg mx-auto pt-32 pb-64 overflow-y-auto">
@@ -48,10 +44,10 @@ export default async function Page({
         </Link>
         <ChevronRight />{" "}
         <Link
-          href={`/home/${collection.id}/${subCollection.id}`}
+          href={`/home/${collection.id}/${sub_collection.id}`}
           className="no-underline font-normal opacity-70 hover:opacity-100"
         >
-          {subCollection.name}
+          {sub_collection.name}
         </Link>
         <ChevronRight /> <span>{note.name}</span>
       </sub>
