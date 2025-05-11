@@ -1,7 +1,6 @@
 import CollectionCard from "@/components/CollectionCard";
 import SearchBar from "@/components/SearchBar";
-import { createClient } from "@/lib/supabase/server";
-import { log } from "console";
+import { readCollections } from "@/lib/supabase/collection";
 
 const Page = async ({
   searchParams,
@@ -11,9 +10,7 @@ const Page = async ({
   const query = (await searchParams).query;
   const stringQuery = query ? query.toLocaleLowerCase() : "";
 
-  const supabase = await createClient();
-  const { data: collectionData } = await supabase.from("collections").select();
-  log(collectionData);
+  const collections = await readCollections();
 
   return (
     <div className="p-6">
@@ -33,8 +30,8 @@ const Page = async ({
           ---Look out some premade Collections---
         </h2>
         <div className="w-full grid grid-cols-2 gap-8 mt-16 px-4">
-          {collectionData &&
-            collectionData
+          {collections &&
+            collections
               .filter((collection) =>
                 collection.name.toLocaleLowerCase().includes(stringQuery)
               )

@@ -1,7 +1,8 @@
 import { redirect } from "next/navigation";
 
-import { collectionData } from "@/data/collectionData";
 import CollectionCard from "@/components/CollectionCard";
+import { getCollectionById } from "@/lib/supabase/collection";
+import { getSubCollectionsByCollectionId } from "@/lib/supabase/subCollection";
 
 export default async function Page({
   params,
@@ -9,9 +10,9 @@ export default async function Page({
   params: Promise<{ collectionId: string }>;
 }) {
   const { collectionId } = await params;
-  const intCollectionId = parseInt(collectionId);
 
-  const collection = collectionData.find((col) => col.id == intCollectionId);
+  const collection = await getCollectionById(collectionId);
+  const sub_collections = await getSubCollectionsByCollectionId(collectionId);
 
   if (!collection) redirect("/not-found");
 
@@ -24,15 +25,16 @@ export default async function Page({
       </div>
       <div className="flex-col-center mt-12">
         <div className="w-full grid grid-cols-2 gap-8 mt-16 px-4">
-          {collection.subCollection.map((subC) => {
-            return (
-              <CollectionCard
-                key={subC.id}
-                collection={subC}
-                href={`/home/${collection.id}/${subC.id}`}
-              />
-            );
-          })}
+          {sub_collections &&
+            sub_collections.map((subC) => {
+              return (
+                <CollectionCard
+                  key={subC.id}
+                  collection={subC}
+                  href={`/home/${collection.id}/${subC.id}`}
+                />
+              );
+            })}
         </div>
       </div>
     </div>

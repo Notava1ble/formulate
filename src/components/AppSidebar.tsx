@@ -11,8 +11,6 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 
-import { collectionData } from "@/data/collectionData";
-import CollectionSidebarItem from "./CollectionSidebarItem";
 import { House } from "lucide-react";
 import Link from "next/link";
 
@@ -53,14 +51,14 @@ export default function AppSidebar() {
         <SidebarGroup>
           <SidebarGroupLabel>Premade Collections</SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu>
+            {/* <SidebarMenu>
               {collectionData.map((collection) => (
                 <CollectionSidebarItem
                   key={collection.id}
                   collection={collection}
                 />
               ))}
-            </SidebarMenu>
+            </SidebarMenu> */}
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
