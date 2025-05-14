@@ -2,37 +2,36 @@ import dynamic from "next/dynamic";
 import { LucideProps } from "lucide-react";
 import dynamicIconImports from "lucide-react/dynamicIconImports";
 
-// TODO: Improve logic
-// FIXME: Fix the problems where no icon is found
-
-// Helper to convert PascalCase icon names (e.g., "UserCircle")
-// to camelCase (e.g., "userCircle") as expected by dynamicIconImports.
-const pascalToCamelCase = (str: string): string => {
+const pascalToKebabCase = (str: string): string => {
   if (!str) return "";
-  return str.charAt(0).toLowerCase() + str.slice(1);
+  return str
+    .replace(/([a-z0-9])([A-Z])/g, "$1-$2")
+    .replace(/([A-Z])([A-Z][a-z])/g, "$1-$2")
+    .toLowerCase();
 };
 
 interface CustomIconProps extends Omit<LucideProps, "name"> {
-  iconName: string; // Expects a PascalCase icon name string (e.g., "Home", "UserCircle")
+  iconName: string;
   className?: string;
 }
 
 const Icon = ({ iconName, className, ...props }: CustomIconProps) => {
-  const camelCaseName = pascalToCamelCase(
+  const kebabCaseName = pascalToKebabCase(
     iconName
   ) as keyof typeof dynamicIconImports;
-  // Default to 'circle' icon if the requested icon is not found or iconName is empty.
+
   const fallbackIconKey = "circle" as keyof typeof dynamicIconImports;
 
   let TargetIcon;
 
-  if (iconName && dynamicIconImports[camelCaseName]) {
-    TargetIcon = dynamic(dynamicIconImports[camelCaseName]);
+  if (iconName && dynamicIconImports[kebabCaseName]) {
+    // console.log(`icon "${kebabCaseName}" found`);
+    TargetIcon = dynamic(dynamicIconImports[kebabCaseName]);
   } else {
     // Log a warning if a specific iconName was provided but not found (and it's not already the fallback)
     if (iconName && iconName.toLowerCase() !== "circle") {
       console.warn(
-        `Icon "${iconName}" (attempted as "${camelCaseName}") not found. Falling back to "circle" icon.`
+        `Icon "${iconName}" (attempted as "${kebabCaseName}") not found. Falling back to "circle" icon.`
       );
     }
     TargetIcon = dynamic(dynamicIconImports[fallbackIconKey]);
