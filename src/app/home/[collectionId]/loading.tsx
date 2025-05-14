@@ -5,7 +5,7 @@ const Loading = () => {
   return (
     <div className="p-6">
       <div className=" w-full flex-center p-24 pt-32">
-        <Skeleton className="bg-zinc-800 w-80 h-12" />
+        <Skeleton className="bg-zinc-800 w-80 h-16" />
       </div>
       <div className="flex-col-center mt-12">
         <LoadingCards />
