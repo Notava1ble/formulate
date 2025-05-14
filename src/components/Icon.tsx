@@ -2,6 +2,9 @@ import dynamic from "next/dynamic";
 import { LucideProps } from "lucide-react";
 import dynamicIconImports from "lucide-react/dynamicIconImports";
 
+// TODO: Improve logic
+// FIXME: Fix the problems where no icon is found
+
 // Helper to convert PascalCase icon names (e.g., "UserCircle")
 // to camelCase (e.g., "userCircle") as expected by dynamicIconImports.
 const pascalToCamelCase = (str: string): string => {
