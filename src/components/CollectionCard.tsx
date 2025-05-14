@@ -12,10 +12,10 @@ const CollectionCard = ({
   href: string;
 }) => {
   return (
-    <div className="bg-zinc-800 rounded-md">
+    <div className="bg-zinc-800 rounded-md hover:scale-102 transition-all">
       <Link
         href={href}
-        className="p-6 py-8 flex justify-start items-center gap-8 hover:scale-102 transition-all animate-fade-in"
+        className="p-6 py-8 flex justify-start items-center gap-8 animate-fade-in"
       >
         <div>
           <Icon iconName={collection.icon} />

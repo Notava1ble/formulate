@@ -1,6 +1,6 @@
 import SearchBar from "@/components/SearchBar";
 import { Suspense } from "react";
-import CardList from "@/components/CardList";
+import CardList from "@/app/home/MainCardList";
 import LoadingCards from "@/components/LoadingCards";
 
 const Page = async ({

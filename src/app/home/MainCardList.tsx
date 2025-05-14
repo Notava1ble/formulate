@@ -1,8 +1,13 @@
 import { readCollections } from "@/lib/supabase/collection";
-import CollectionCard from "./CollectionCard";
+import CollectionCard from "../../components/CollectionCard";
 
-const CardList = async () => {
-  const collections = await readCollections();
+const CardList = async ({ collectionId }: { collectionId?: string }) => {
+  let collections;
+
+  if (!collectionId) {
+    collections = await readCollections();
+  } else {
+  }
 
   return (
     <div className="w-full grid grid-cols-2 gap-8 mt-16 px-4">
