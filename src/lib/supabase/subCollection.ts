@@ -2,7 +2,7 @@ import { createClient } from "./server";
 
 export interface SubCollectionType {
   id: number;
-  collection_id: string;
+  collection_id: number;
   name: string;
   icon: string;
 }
@@ -37,4 +37,18 @@ export async function getSubCollectionsByCollectionId(
   if (error) return null;
 
   return sub_collection as SubCollectionType[] | null;
+}
+
+export async function getAllSubCollections(): Promise<
+  SubCollectionType[] | null
+> {
+  const supabase = await createClient();
+  const { data: sub_collections, error } = await supabase
+    .from("sub_collections")
+    .select("*");
+  //TODO: handle errors better
+  if (error) {
+    return null;
+  }
+  return sub_collections as SubCollectionType[] | null;
 }
