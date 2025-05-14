@@ -129,6 +129,17 @@
   .flex-col-center {
     @apply flex flex-col justify-center items-center;
   }
+  .animate-fade-in {
+    animation: fade-in 0.5s ease-in;
+  }
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
   .font-poppins {
     font-family: var(--font-poppins), sans-serif;
   }

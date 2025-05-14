@@ -12,17 +12,19 @@ const CollectionCard = ({
   href: string;
 }) => {
   return (
-    <Link
-      href={href}
-      className="bg-zinc-800 rounded-md p-6 py-8 flex justify-start items-center gap-8 hover:scale-102 transition-all"
-    >
-      <div>
-        <Icon iconName={collection.icon} />
-      </div>
-      <div>
-        <h1 className="text-3xl font-poppins font-bold">{collection.name}</h1>
-      </div>
-    </Link>
+    <div className="bg-zinc-800 rounded-md">
+      <Link
+        href={href}
+        className="p-6 py-8 flex justify-start items-center gap-8 hover:scale-102 transition-all animate-fade-in"
+      >
+        <div>
+          <Icon iconName={collection.icon} />
+        </div>
+        <div>
+          <h1 className="text-3xl font-poppins font-bold">{collection.name}</h1>
+        </div>
+      </Link>
+    </div>
   );
 };
 export default CollectionCard;
