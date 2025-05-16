@@ -10,7 +10,6 @@ const Navbar = () => {
           <h1 className="text-lg font-poppins font-bold">Formulate</h1>
         </Link>
         <div className="flex-center gap-6">
-          <Button variant="ghost">Login</Button>
           <Button>
             <Plus />
             Create
