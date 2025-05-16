@@ -10,8 +10,6 @@ export default async function Page() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  console.log(user);
-
   if (user) redirect("/home");
   return (
     <div className="w-full">
