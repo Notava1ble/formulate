@@ -1,4 +1,3 @@
-// app/login/actions.ts
 "use server";
 
 import { redirect } from "next/navigation";
@@ -9,8 +8,7 @@ export async function signInWithGoogle() {
   const { error, data } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
-      // In production, use your real URL
-      redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/callback`,
+      redirectTo: `${getBaseUrl()}/auth/callback`,
     },
   });
 
@@ -20,4 +18,21 @@ export async function signInWithGoogle() {
   if (data.url) {
     redirect(data.url);
   }
+}
+
+function getBaseUrl() {
+  if (typeof window !== "undefined") {
+    return "";
+  }
+
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`;
+  }
+
+  if (process.env.DEPLOYMENT_URL) {
+    return `https://${process.env.DEPLOYMENT_URL}`;
+  }
+
+  const port = process.env.PORT ?? 3000;
+  return `http://localhost:${port}`;
 }
