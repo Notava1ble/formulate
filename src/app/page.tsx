@@ -1,8 +1,18 @@
 import MainNavbar from "@/components/MainNavbar";
 import { Button } from "@/components/ui/button";
+import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
-export default function Page() {
+export default async function Page() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  console.log(user);
+
+  if (user) redirect("/home");
   return (
     <div className="w-full">
       <MainNavbar />
