@@ -3,10 +3,11 @@
 
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { revalidatePath } from "next/cache";
 
 export async function signInWithGoogle() {
   const supabase = await createClient();
-  const { error, data } = await supabase.auth.signInWithOAuth({
+  const { error } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
       // In production, use your real URL
@@ -17,9 +18,6 @@ export async function signInWithGoogle() {
   if (error) {
     redirect("/error");
   }
-  if (data.url) {
-    // console.log(data.url);
-
-    redirect(data.url);
-  }
+  revalidatePath("/", "layout");
+  redirect("/home");
 }

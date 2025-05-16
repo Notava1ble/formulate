@@ -96,9 +96,7 @@ export default async function AppSidebar() {
                   <span>Account</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Link href={`signout`}>
-                    <span>Sign Out</span>
-                  </Link>
+                  <span>Sign out</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
