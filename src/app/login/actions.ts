@@ -25,18 +25,25 @@ export async function signIn(provider: Provider) {
 }
 
 function getBaseUrl() {
-  if (typeof window !== "undefined") {
-    return "";
+  // In the browser (e.g. on hydration) we just use a relative URL
+  if (typeof window !== "undefined") return "";
+
+  // Local development
+  if (process.env.NODE_ENV === "development") {
+    const port = process.env.PORT ?? "3000";
+    return `http://localhost:${port}`;
   }
 
+  // Use the production Url set only in the prod
+  if (process.env.NEXT_PUBLIC_SITE_URL) {
+    return process.env.NEXT_PUBLIC_SITE_URL;
+  }
+
+  // Fallback: Vercel’s auto-injected URL (could be preview!)
   if (process.env.VERCEL_URL) {
     return `https://${process.env.VERCEL_URL}`;
   }
 
-  if (process.env.DEPLOYMENT_URL) {
-    return `https://${process.env.DEPLOYMENT_URL}`;
-  }
-
-  const port = process.env.PORT ?? 3000;
+  const port = process.env.PORT ?? "3000";
   return `http://localhost:${port}`;
 }
