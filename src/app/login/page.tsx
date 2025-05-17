@@ -7,7 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { signInWithGoogle } from "./actions";
+import { signIn } from "./actions";
 
 export default function LoginPage() {
   return (
@@ -31,7 +31,7 @@ export default function LoginPage() {
                     <Button
                       variant="outline"
                       className="w-full"
-                      formAction={signInWithGoogle}
+                      formAction={signInGoogle}
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -44,7 +44,11 @@ export default function LoginPage() {
                       </svg>
                       Login with Google
                     </Button>
-                    <Button variant="outline" className="w-full">
+                    <Button
+                      variant="outline"
+                      className="w-full"
+                      formAction={signInGithub}
+                    >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
@@ -65,4 +69,14 @@ export default function LoginPage() {
       </div>
     </div>
   );
+}
+
+async function signInGithub() {
+  "use server";
+  await signIn("github");
+}
+
+async function signInGoogle() {
+  "use server";
+  await signIn("google");
 }

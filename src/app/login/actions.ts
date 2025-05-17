@@ -2,14 +2,15 @@
 
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { Provider } from "@supabase/auth-js";
 
-export async function signInWithGoogle() {
+export async function signIn(provider: Provider) {
   const supabase = await createClient();
   const baseUrl = getBaseUrl();
 
   // console.log("here:", baseUrl);
   const { error, data } = await supabase.auth.signInWithOAuth({
-    provider: "google",
+    provider,
     options: {
       redirectTo: `${baseUrl}/auth/callback`,
     },
