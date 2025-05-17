@@ -7,7 +7,7 @@ export async function signInWithGoogle() {
   const supabase = await createClient();
   const baseUrl = getBaseUrl();
 
-  console.log(baseUrl);
+  console.log("here:", baseUrl);
   const { error, data } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
