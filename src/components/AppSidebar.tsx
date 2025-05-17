@@ -95,11 +95,13 @@ export default async function AppSidebar() {
                 <DropdownMenuItem>
                   <span>Account</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <form action="/auth/signout" method="post">
-                    <button type="submit">Sign out</button>
-                  </form>
-                </DropdownMenuItem>
+                <form action="/auth/signout" method="post">
+                  <DropdownMenuItem asChild>
+                    <button type="submit" className="w-full h-full">
+                      Sign out
+                    </button>
+                  </DropdownMenuItem>
+                </form>
               </DropdownMenuContent>
             </DropdownMenu>
           </SidebarMenuItem>
