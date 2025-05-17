@@ -5,10 +5,13 @@ import { createClient } from "@/lib/supabase/server";
 
 export async function signInWithGoogle() {
   const supabase = await createClient();
+  const baseUrl = getBaseUrl();
+
+  console.log(baseUrl);
   const { error, data } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
-      redirectTo: `${getBaseUrl()}/auth/callback`,
+      redirectTo: `${baseUrl}/auth/callback`,
     },
   });
 
