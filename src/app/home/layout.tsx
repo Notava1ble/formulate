@@ -4,16 +4,16 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import AppSidebar from "@/components/AppSidebar";
 import Navbar from "@/components/Navbar";
 
-export const revalidate = 60;
-
 export default async function Layout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   const cookieStore = await cookies();
-  // TODO: Make it default to open if it's the first time
-  const defaultOpen = cookieStore.get("sidebar_state")?.value === "true";
+  const cookieSidebarState = cookieStore.get("sidebar_state");
+  const defaultOpen = cookieSidebarState
+    ? cookieSidebarState.value === "true"
+    : true;
 
   return (
     <SidebarProvider defaultOpen={defaultOpen}>
