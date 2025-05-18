@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/sidebar";
 import { readCollections } from "@/lib/supabase/collection";
 
-import { ChevronUp, House, User2 } from "lucide-react";
+import { ChevronUp, House, Plus, User2 } from "lucide-react";
 import Link from "next/link";
 import CollectionSidebarItem from "./CollectionSidebarItem";
 import { getAllSubCollections } from "@/lib/supabase/subCollection";
@@ -48,6 +48,21 @@ export default async function AppSidebar() {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
+        <SidebarGroup>
+          <SidebarGroupLabel>Actions</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link href={`/home/create`}>
+                    <Plus />
+                    Create
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
         <SidebarGroup>
           <SidebarGroupLabel>Premade Collections</SidebarGroupLabel>
           <SidebarGroupContent>
