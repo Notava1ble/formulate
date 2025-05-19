@@ -2,6 +2,7 @@
 import { useMemo } from "react";
 import * as iconData from "lucide-static"; // This imports all icons as an object
 import { Button } from "./ui/button";
+import { FormCollectionFieldErrors } from "@/lib/validation";
 
 // TODO: TRY TO OPTIMIZE
 
@@ -100,9 +101,11 @@ const MAX_ICONS_TO_DISPLAY = 50;
 
 const SearchedIcons = ({
   iconSearch,
+  errors,
   handleClick,
 }: {
   iconSearch: string;
+  errors: FormCollectionFieldErrors;
   handleClick: (selectedIcon: string, svgString: string) => void;
 }) => {
   const normalizedSearchTerm = iconSearch.toLowerCase().trim();
@@ -121,19 +124,27 @@ const SearchedIcons = ({
     }));
   }, [normalizedSearchTerm]);
 
+  if (errors.icon !== undefined && iconSearch === "") {
+    return (
+      <p className="text-[12px] min-h-[18px] text-red-500 mt-1.5">
+        {errors.icon[0]}
+      </p>
+    );
+  }
+
   if (!normalizedSearchTerm) {
     return (
-      <div className="text-neutral-400 mt-2">
+      <p className="text-neutral-400 mt-2 text-sm">
         Please type in the search bar to find icons.
-      </div>
+      </p>
     );
   }
 
   if (filteredAndLimitedIcons.length === 0) {
     return (
-      <div className="text-neutral-400 mt-2">
+      <p className="text-neutral-400 mt-2 text-sm">
         No icons found for &quot;{iconSearch}&quot;.
-      </div>
+      </p>
     );
   }
 

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import SearchedIcons, { SvgIcon } from "@/components/SearchedIcons";
@@ -15,7 +14,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { CollectionType } from "@/lib/supabase/collection";
-import { formCollectionSchema } from "@/lib/validation";
+import {
+  FormCollectionFieldErrors,
+  formCollectionSchema,
+} from "@/lib/validation";
 import { X } from "lucide-react";
 import { useActionState, useState } from "react";
 import { z } from "zod";
@@ -26,7 +28,7 @@ const CreateCollectionForm = ({
   collections: CollectionType[] | null;
 }) => {
   // TODO: Show the errors to the user
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [errors, setErrors] = useState<FormCollectionFieldErrors>({});
   const [parentCollection, setParentCollection] = useState<
     CollectionType | undefined
   >(undefined);
@@ -38,15 +40,17 @@ const CreateCollectionForm = ({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleFormSubmit = async (prevState: any, formData: FormData) => {
     try {
+      const subject = formData.get("subject") as string | undefined;
       const formValues = {
         collectionId: parentCollection?.id,
         name: formData.get("name") as string,
         icon: selectedIcon?.selectedIconName,
-        subject: formData.get("subject") as string | undefined,
+        subject: subject ? subject : undefined,
       };
 
       console.log(formValues);
       await formCollectionSchema.parseAsync(formValues);
+      setErrors({});
 
       // TODO: write the entry in the database.
       let result;
@@ -56,7 +60,7 @@ const CreateCollectionForm = ({
       if (error instanceof z.ZodError) {
         const fieldErorrs = error.flatten().fieldErrors;
 
-        setErrors(fieldErorrs as unknown as Record<string, string>);
+        setErrors(fieldErorrs as FormCollectionFieldErrors);
         console.log(fieldErorrs);
 
         return { ...prevState, error: "Validation failed", status: "ERROR" };
@@ -71,6 +75,7 @@ const CreateCollectionForm = ({
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [state, formAction, isPending] = useActionState(handleFormSubmit, {
     error: "",
     status: "INITIAL",
@@ -134,24 +139,41 @@ const CreateCollectionForm = ({
                 </Button>
               )}
             </div>
+            <p className="invisible">{"\u00A0"}</p>
           </div>
-          <div className="mt-10 grid w-full max-w-md items-center gap-1.5">
+          <div className="mt-6 grid w-full max-w-md items-center gap-1.5">
             <Label htmlFor="name">Collection Name</Label>
             <Input
               type="name"
               id="name"
               name="name"
               placeholder="Collection Name"
+              className={`${errors.name ? "border-red-500" : ""}`}
             />
+            <p
+              className={`text-[12px] min-h-[18px] ${
+                errors.name ? "text-red-500 visible" : "invisible"
+              }`}
+            >
+              {errors.name ? errors.name[0] : "\u00A0"}
+            </p>
           </div>
-          <div className="mt-10 grid w-full max-w-md items-center gap-1.5">
+          <div className="mt-6 grid w-full max-w-md items-center gap-1.5">
             <Label htmlFor="subject">Collection Subject</Label>
             <Input
               type="subject"
               id="subject"
               name="subject"
               placeholder="Collection Subject"
+              className={`${errors.subject ? "border-red-500" : ""}`}
             />
+            <p
+              className={`text-[12px] min-h-[18px] ${
+                errors.subject ? "text-red-500 visible" : "invisible"
+              }`}
+            >
+              {errors.subject ? errors.subject[0] : "\u00A0"}
+            </p>
           </div>
         </div>
         <div className="flex-1">
@@ -178,11 +200,13 @@ const CreateCollectionForm = ({
                   id="icon"
                   placeholder="Icon Name"
                   value={iconSearch}
+                  className={`${errors.icon ? "border-red-500" : ""}`}
                   onChange={(e) => setIconSearch(e.target.value)}
                 />
               </div>
               <SearchedIcons
                 iconSearch={iconSearch}
+                errors={errors}
                 handleClick={(selectedIconName: string, svgString: string) => {
                   setIconSearch(selectedIconName);
                   setSelectedIcon({ selectedIconName, svgString });
@@ -192,10 +216,16 @@ const CreateCollectionForm = ({
           )}
         </div>
       </div>
-      <div className="w-full flex justify-end items-center mt-12">
-        <Button type="submit" size="lg" className="text-lg ">
-          Create
-        </Button>
+      <div className="w-full flex justify-end items-center mt-6">
+        {isPending ? (
+          <Button type="button" disabled size="lg" className="text-lg ">
+            Loading...
+          </Button>
+        ) : (
+          <Button type="submit" size="lg" className="text-lg ">
+            Create
+          </Button>
+        )}
       </div>
     </form>
   );
