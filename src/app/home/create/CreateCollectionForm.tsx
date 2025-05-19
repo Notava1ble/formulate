@@ -21,6 +21,7 @@ import {
 import { X } from "lucide-react";
 import { useActionState, useState } from "react";
 import { z } from "zod";
+import { createCollectionServerAction } from "./action";
 
 const CreateCollectionForm = ({
   collections,
@@ -49,11 +50,14 @@ const CreateCollectionForm = ({
       };
 
       console.log(formValues);
-      await formCollectionSchema.parseAsync(formValues);
+      const parsedFormValues = await formCollectionSchema.parseAsync(
+        formValues
+      );
       setErrors({});
 
       // TODO: write the entry in the database.
-      let result;
+      const result = await createCollectionServerAction(parsedFormValues);
+      console.log(result);
 
       return result;
     } catch (error) {
@@ -185,6 +189,7 @@ const CreateCollectionForm = ({
               <Button
                 onClick={() => {
                   setSelectedIcon(undefined);
+                  setIconSearch("");
                 }}
                 variant="secondary"
               >

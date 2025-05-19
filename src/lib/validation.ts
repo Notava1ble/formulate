@@ -28,13 +28,13 @@ export const formCollectionSchema = z
   })
   .refine(
     (data) => {
-      if (data.collectionId !== undefined) {
-        return data.subject && true;
+      if (data.collectionId === undefined) {
+        return !!data.subject;
       }
       return true;
     },
     {
-      message: "Subject is required when a collection is provided",
+      message: "Subject is required when a parent collection is not provided",
       path: ["subject"],
     }
   );
