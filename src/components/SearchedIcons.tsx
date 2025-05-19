@@ -1,7 +1,9 @@
 "use client";
 import { useMemo } from "react";
 import * as iconData from "lucide-static"; // This imports all icons as an object
-import { Button } from "./ui/button"; // Assuming you have this component
+import { Button } from "./ui/button";
+
+// TODO: TRY TO OPTIMIZE
 
 // Helper component to render and style SVG strings from lucide-static
 interface SvgIconProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -98,7 +100,7 @@ const MAX_ICONS_TO_DISPLAY = 50;
 
 const SearchedIcons = ({
   iconSearch,
-  handleClick, // Not directly used for display here, but kept as per original props
+  handleClick,
 }: {
   iconSearch: string;
   handleClick: (selectedIcon: string, svgString: string) => void;
@@ -137,7 +139,6 @@ const SearchedIcons = ({
 
   return (
     <div className="grid grid-cols-10 max-w-md mt-2 gap-1">
-      {/* Added gap for better spacing */}
       {filteredAndLimitedIcons.map(({ name, svgString }) => (
         <Button
           key={name}
