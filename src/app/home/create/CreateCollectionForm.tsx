@@ -22,6 +22,7 @@ import { X } from "lucide-react";
 import { useActionState, useState } from "react";
 import { z } from "zod";
 import { createCollectionServerAction } from "./action";
+import { useRouter } from "next/navigation";
 
 const CreateCollectionForm = ({
   collections,
@@ -37,6 +38,7 @@ const CreateCollectionForm = ({
   const [selectedIcon, setSelectedIcon] = useState<
     { selectedIconName: string; svgString: string } | undefined
   >(undefined);
+  const router = useRouter();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleFormSubmit = async (prevState: any, formData: FormData) => {
@@ -58,6 +60,11 @@ const CreateCollectionForm = ({
       // TODO: write the entry in the database.
       const result = await createCollectionServerAction(parsedFormValues);
       console.log(result);
+
+      if (result.status === "SUCCESS") {
+        const newRoute = `/home/${result.data.id}`;
+        router.push(newRoute);
+      }
 
       return result;
     } catch (error) {

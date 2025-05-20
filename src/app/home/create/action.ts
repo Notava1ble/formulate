@@ -13,7 +13,15 @@ interface FormValues {
 
 export type CollectionCreateType = Omit<CollectionType, "id">;
 
-export async function createCollectionServerAction(formValues: FormValues) {
+export interface rType {
+  error: string;
+  data: CollectionType;
+  status: "SUCCESS" | "ERROR";
+}
+
+export async function createCollectionServerAction(
+  formValues: FormValues
+): Promise<rType> {
   // If the parent Collection was not specified it creates a collection
   if (!formValues.collectionId) {
     const row: CollectionCreateType = {
@@ -35,7 +43,7 @@ export async function createCollectionServerAction(formValues: FormValues) {
 
     if (error) {
       return parseServerActionResponse({
-        error: JSON.stringify(error),
+        error: error,
         data: "",
         status: "ERROR",
       });
@@ -43,8 +51,13 @@ export async function createCollectionServerAction(formValues: FormValues) {
 
     return parseServerActionResponse({
       error: "",
-      data: JSON.stringify(data[0]),
+      data: data[0],
       status: "SUCCESS",
     });
   }
+  return parseServerActionResponse({
+    error: "Not Implemented",
+    data: "",
+    status: "ERROR",
+  });
 }
