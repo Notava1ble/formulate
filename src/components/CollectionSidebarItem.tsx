@@ -22,6 +22,18 @@ const CollectionSidebarItem = async ({
   collection: CollectionType;
   sub_collections: SubCollectionType[];
 }) => {
+  if (sub_collections.length === 0) {
+    return (
+      <SidebarMenuItem>
+        <SidebarMenuButton asChild>
+          <Link href={`/home/${collection.id}`}>
+            <Icon iconName={collection.icon} className="" />
+            <span>{collection.name}</span>
+          </Link>
+        </SidebarMenuButton>
+      </SidebarMenuItem>
+    );
+  }
   return (
     <Collapsible className="group/collapsible">
       <SidebarMenuItem>

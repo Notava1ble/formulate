@@ -20,6 +20,21 @@ export async function readCollections() {
   return collections as CollectionType[] | null;
 }
 
+export async function getPremadeCollections() {
+  const supabase = await createClient();
+
+  const { data: collections, error } = await supabase
+    .from("collections")
+    .select("*")
+    .is("user_id", null);
+  //TODO: handle errors better
+  if (error) {
+    return null;
+  }
+
+  return collections as CollectionType[] | null;
+}
+
 export async function getCollectionById(id: string) {
   const supabase = await createClient();
   const { data: collection, error } = await supabase
