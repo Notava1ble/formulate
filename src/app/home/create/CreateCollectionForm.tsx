@@ -23,6 +23,7 @@ import { useActionState, useState } from "react";
 import { z } from "zod";
 import { createCollectionServerAction } from "./action";
 import { useRouter } from "next/navigation";
+import { revalidatePath } from "next/cache";
 
 const CreateCollectionForm = ({
   collections,
@@ -67,6 +68,7 @@ const CreateCollectionForm = ({
         } else {
           newRoute = `/home/${result.data.id}`;
         }
+        revalidatePath("/home");
         router.push(newRoute);
       }
 
