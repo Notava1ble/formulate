@@ -4,6 +4,7 @@ import { CollectionType } from "@/lib/supabase/collection";
 import { createClient } from "@/lib/supabase/server";
 import { SubCollectionType } from "@/lib/supabase/subCollection";
 import { parseServerActionResponse } from "@/lib/utils";
+import { revalidatePath } from "next/cache";
 
 interface FormValues {
   collectionId?: number | undefined;
@@ -51,6 +52,7 @@ export async function createCollectionServerAction(
       });
     }
 
+    revalidatePath("/home");
     return parseServerActionResponse({
       error: "",
       data: data[0],
@@ -77,6 +79,7 @@ export async function createCollectionServerAction(
       status: "ERROR",
     });
   }
+  revalidatePath("/home");
 
   return parseServerActionResponse({
     error: "",
