@@ -2,6 +2,7 @@
 
 import { CollectionType } from "@/lib/supabase/collection";
 import { createClient } from "@/lib/supabase/server";
+import { SubCollectionType } from "@/lib/supabase/subCollection";
 import { parseServerActionResponse } from "@/lib/utils";
 
 interface FormValues {
@@ -12,10 +13,11 @@ interface FormValues {
 }
 
 export type CollectionCreateType = Omit<CollectionType, "id" | "user_id">;
+export type SubCollectionCreateType = Omit<SubCollectionType, "id" | "user_id">;
 
 export interface rType {
   error: string;
-  data: CollectionType;
+  data: CollectionType | SubCollectionType;
   status: "SUCCESS" | "ERROR";
 }
 
@@ -55,9 +57,30 @@ export async function createCollectionServerAction(
       status: "SUCCESS",
     });
   }
+  const row: SubCollectionCreateType = {
+    name: formValues.name,
+    icon: formValues.icon,
+    collection_id: formValues.collectionId,
+  };
+  console.log(row);
+
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("sub_collections")
+    .insert(row)
+    .select();
+
+  if (error) {
+    return parseServerActionResponse({
+      error: error,
+      data: "",
+      status: "ERROR",
+    });
+  }
+
   return parseServerActionResponse({
-    error: "Not Implemented",
-    data: "",
-    status: "ERROR",
+    error: "",
+    data: data[0],
+    status: "SUCCESS",
   });
 }

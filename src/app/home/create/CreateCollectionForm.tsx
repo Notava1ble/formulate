@@ -61,7 +61,12 @@ const CreateCollectionForm = ({
       console.log(result);
 
       if (result.status === "SUCCESS") {
-        const newRoute = `/home/${result.data.id}`;
+        let newRoute;
+        if ("collection_id" in result.data) {
+          newRoute = `/home/${result.data.collection_id}/${result.data.id}`;
+        } else {
+          newRoute = `/home/${result.data.id}`;
+        }
         router.push(newRoute);
       }
 
