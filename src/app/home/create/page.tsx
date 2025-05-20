@@ -1,8 +1,8 @@
-import { readCollections } from "@/lib/supabase/collection";
+import { getCollectionsForUserId } from "@/lib/supabase/collection";
 import CreateCollectionForm from "./CreateCollectionForm";
 
 const Page = async () => {
-  const collections = await readCollections();
+  const collections = await getCollectionsForUserId();
 
   return (
     <div className="p-6">

@@ -34,3 +34,22 @@ export async function getCollectionById(id: string) {
 
   return collection as CollectionType | null;
 }
+
+export async function getCollectionsForUserId() {
+  const supabase = await createClient();
+  const userId = (await supabase.auth.getUser()).data.user?.id;
+
+  if (userId) {
+    const { data: collections, error } = await supabase
+      .from("collections")
+      .select("*")
+      .eq("user_id", userId);
+    //TODO: handle errors better
+    if (error) {
+      return null;
+    }
+
+    return collections as CollectionType[] | null;
+  }
+  return null;
+}
