@@ -68,29 +68,31 @@ export default async function AppSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
-        <SidebarGroup>
-          <SidebarGroupLabel>Your Collections</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {userCollections &&
-                userCollections.map((collection) => {
-                  const subCollectionsForCollection = sub_collections
-                    ? sub_collections.filter(
-                        (sub_collection) =>
-                          sub_collection.collection_id == collection.id
-                      )
-                    : [];
-                  return (
-                    <CollectionSidebarItem
-                      collection={collection}
-                      sub_collections={subCollectionsForCollection}
-                      key={collection.id}
-                    />
-                  );
-                })}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+        {userCollections && userCollections.length > 1 && (
+          <SidebarGroup>
+            <SidebarGroupLabel>Your Collections</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {userCollections &&
+                  userCollections.map((collection) => {
+                    const subCollectionsForCollection = sub_collections
+                      ? sub_collections.filter(
+                          (sub_collection) =>
+                            sub_collection.collection_id == collection.id
+                        )
+                      : [];
+                    return (
+                      <CollectionSidebarItem
+                        collection={collection}
+                        sub_collections={subCollectionsForCollection}
+                        key={collection.id}
+                      />
+                    );
+                  })}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        )}
         <SidebarGroup>
           <SidebarGroupLabel>Premade Collections</SidebarGroupLabel>
           <SidebarGroupContent>
