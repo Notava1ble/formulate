@@ -11,7 +11,7 @@ interface FormValues {
   subject?: string | undefined;
 }
 
-export type CollectionCreateType = Omit<CollectionType, "id">;
+export type CollectionCreateType = Omit<CollectionType, "id" | "user_id">;
 
 export interface rType {
   error: string;

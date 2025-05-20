@@ -5,6 +5,7 @@ export interface CollectionType {
   name: string;
   subject: string;
   icon: string;
+  user_id: string | null;
 }
 
 export async function readCollections() {

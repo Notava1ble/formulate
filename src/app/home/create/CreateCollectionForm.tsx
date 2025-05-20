@@ -57,13 +57,22 @@ const CreateCollectionForm = ({
       );
       setErrors({});
 
-      // TODO: write the entry in the database.
       const result = await createCollectionServerAction(parsedFormValues);
       console.log(result);
 
       if (result.status === "SUCCESS") {
         const newRoute = `/home/${result.data.id}`;
         router.push(newRoute);
+      }
+
+      if (result.status === "ERROR") {
+        console.log(result.error);
+        const newErrors: FormCollectionFieldErrors = {
+          name: ["An Unexpected Error Occured"],
+          subject: ["An Unexpected Error Occured"],
+          icon: ["An Unexpected Error Occured"],
+        };
+        setErrors(newErrors);
       }
 
       return result;
@@ -113,7 +122,7 @@ const CreateCollectionForm = ({
                     id="parentCollection"
                   />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="max-h-60 overflow-y-auto">
                   <SelectGroup>
                     <SelectLabel>Collections</SelectLabel>
                     {collections &&
