@@ -1,5 +1,5 @@
-import { CollectionType } from "@/lib/supabase/collection";
-import { SubCollectionType } from "@/lib/supabase/subCollection";
+import { CollectionType } from "@/supabase/db/collection";
+import { SubCollectionType } from "@/supabase/db/subCollection";
 import Link from "next/link";
 
 import Icon from "./Icon";

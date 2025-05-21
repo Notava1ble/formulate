@@ -13,7 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { CollectionType } from "@/lib/supabase/collection";
+import { CollectionType } from "@/supabase/db/collection";
 import {
   FormCollectionFieldErrors,
   formCollectionSchema,

@@ -11,8 +11,8 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "./ui/sidebar";
-import { CollectionType } from "@/lib/supabase/collection";
-import { SubCollectionType } from "@/lib/supabase/subCollection";
+import { CollectionType } from "@/supabase/db/collection";
+import { SubCollectionType } from "@/supabase/db/subCollection";
 import Icon from "./Icon";
 
 const CollectionSidebarItem = async ({

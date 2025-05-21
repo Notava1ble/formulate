@@ -13,19 +13,19 @@ import {
 import {
   getCollectionsForUserId,
   getPremadeCollections,
-} from "@/lib/supabase/collection";
+} from "@/supabase/db/collection";
 
 import { ChevronUp, House, Plus, User2 } from "lucide-react";
 import Link from "next/link";
 import CollectionSidebarItem from "./CollectionSidebarItem";
-import { getAllSubCollections } from "@/lib/supabase/subCollection";
+import { getAllSubCollections } from "@/supabase/db/subCollection";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { getUser } from "@/lib/supabase/user";
+import { getUser } from "@/supabase/db/user";
 import { Avatar, AvatarFallback } from "./ui/avatar";
 import { AvatarImage } from "@radix-ui/react-avatar";
 

@@ -1,8 +1,8 @@
 "use server";
 
-import { CollectionType } from "@/lib/supabase/collection";
-import { createClient } from "@/lib/supabase/server";
-import { SubCollectionType } from "@/lib/supabase/subCollection";
+import { CollectionType } from "@/supabase/db/collection";
+import { createClient } from "@/supabase/server";
+import { SubCollectionType } from "@/supabase/db/subCollection";
 import { parseServerActionResponse } from "@/lib/utils";
 import { revalidatePath } from "next/cache";
 

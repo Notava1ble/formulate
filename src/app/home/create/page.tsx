@@ -1,4 +1,4 @@
-import { getCollectionsForUserId } from "@/lib/supabase/collection";
+import { getCollectionsForUserId } from "@/supabase/db/collection";
 import CreateCollectionForm from "./CreateCollectionForm";
 
 const Page = async () => {

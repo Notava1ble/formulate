@@ -1,9 +1,9 @@
 import { redirect } from "next/navigation";
 
 import NoteCard from "@/components/NoteCard";
-import { getCollectionById } from "@/lib/supabase/collection";
-import { getSubCollectionById } from "@/lib/supabase/subCollection";
-import { getNotesBySubCollectionId } from "@/lib/supabase/notes";
+import { getCollectionById } from "@/supabase/db/collection";
+import { getSubCollectionById } from "@/supabase/db/subCollection";
+import { getNotesBySubCollectionId } from "@/supabase/db/notes";
 
 export default async function Page({
   params,

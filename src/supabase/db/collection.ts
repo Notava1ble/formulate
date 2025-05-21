@@ -1,12 +1,11 @@
-import { createClient } from "./server";
+import { Database } from "../schema";
+import { createClient } from "../server";
 
-export interface CollectionType {
-  id: number;
-  name: string;
-  subject: string;
-  icon: string;
-  user_id: string | null;
-}
+export type CollectionType = Database["public"]["Tables"]["collections"]["Row"];
+export type CollectionInsertType =
+  Database["public"]["Tables"]["collections"]["Insert"];
+export type CollectionUpdateType =
+  Database["public"]["Tables"]["collections"]["Update"];
 
 export async function readCollections() {
   const supabase = await createClient();
@@ -17,7 +16,7 @@ export async function readCollections() {
   if (error) {
     return null;
   }
-  return collections as CollectionType[] | null;
+  return collections as CollectionType[];
 }
 
 export async function getPremadeCollections() {
@@ -32,22 +31,29 @@ export async function getPremadeCollections() {
     return null;
   }
 
-  return collections as CollectionType[] | null;
+  return collections as CollectionType[];
 }
 
 export async function getCollectionById(id: string) {
   const supabase = await createClient();
+
+  // Check if id is a number
+  const numericId = Number(id);
+  if (isNaN(numericId)) {
+    return null;
+  }
+
   const { data: collection, error } = await supabase
     .from("collections")
     .select("*")
-    .eq("id", id)
+    .eq("id", numericId)
     .single();
   //TODO: handle errors better
   if (error) {
     return null;
   }
 
-  return collection as CollectionType | null;
+  return collection as CollectionType;
 }
 
 export async function getCollectionsForUserId() {
@@ -64,7 +70,7 @@ export async function getCollectionsForUserId() {
       return null;
     }
 
-    return collections as CollectionType[] | null;
+    return collections as CollectionType[];
   }
   return null;
 }
