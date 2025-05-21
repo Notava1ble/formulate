@@ -1,20 +1,27 @@
-import { createClient } from "./server";
+import { Database } from "../schema";
+import { createClient } from "../server";
 
-export interface SubCollectionType {
-  id: number;
-  collection_id: number;
-  name: string;
-  icon: string;
-}
+export type SubCollectionType =
+  Database["public"]["Tables"]["sub_collections"]["Row"];
+export type SubCollectionInsertType =
+  Database["public"]["Tables"]["sub_collections"]["Insert"];
+export type SubCollectionUpdateType =
+  Database["public"]["Tables"]["sub_collections"]["Update"];
 
 export async function getSubCollectionById(
   id: string
 ): Promise<SubCollectionType | null> {
   const supabase = await createClient();
+
+  const numericId = Number(id);
+  if (isNaN(numericId)) {
+    return null;
+  }
+
   const { data: sub_collection, error } = await supabase
     .from("sub_collections")
     .select("*")
-    .eq("id", id)
+    .eq("id", numericId)
     .single();
   //TODO: handle errors better
   if (error) {
@@ -28,15 +35,21 @@ export async function getSubCollectionsByCollectionId(
   collectionId: string
 ): Promise<SubCollectionType[] | null> {
   const supabase = await createClient();
+
+  const numericId = Number(collectionId);
+  if (isNaN(numericId)) {
+    return null;
+  }
+
   const { data: sub_collection, error } = await supabase
     .from("sub_collections")
     .select("*")
-    .eq("collection_id", collectionId);
+    .eq("collection_id", numericId);
 
   // TODO: Handle Errors better
   if (error) return null;
 
-  return sub_collection as SubCollectionType[] | null;
+  return sub_collection as SubCollectionType[];
 }
 
 export async function getAllSubCollections(): Promise<
@@ -50,5 +63,5 @@ export async function getAllSubCollections(): Promise<
   if (error) {
     return null;
   }
-  return sub_collections as SubCollectionType[] | null;
+  return sub_collections as SubCollectionType[];
 }

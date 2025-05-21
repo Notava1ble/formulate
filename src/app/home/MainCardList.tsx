@@ -1,4 +1,4 @@
-import { readCollections } from "@/lib/supabase/collection";
+import { readCollections } from "@/supabase/db/collection";
 import CollectionCard from "../../components/CollectionCard";
 
 const CardList = async ({ collectionId }: { collectionId?: string }) => {

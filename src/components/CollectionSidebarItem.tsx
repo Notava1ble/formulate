@@ -11,8 +11,8 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "./ui/sidebar";
-import { CollectionType } from "@/lib/supabase/collection";
-import { SubCollectionType } from "@/lib/supabase/subCollection";
+import { CollectionType } from "@/supabase/db/collection";
+import { SubCollectionType } from "@/supabase/db/subCollection";
 import Icon from "./Icon";
 
 const CollectionSidebarItem = async ({
@@ -22,6 +22,18 @@ const CollectionSidebarItem = async ({
   collection: CollectionType;
   sub_collections: SubCollectionType[];
 }) => {
+  if (sub_collections.length === 0) {
+    return (
+      <SidebarMenuItem>
+        <SidebarMenuButton asChild>
+          <Link href={`/home/${collection.id}`}>
+            <Icon iconName={collection.icon} className="" />
+            <span>{collection.name}</span>
+          </Link>
+        </SidebarMenuButton>
+      </SidebarMenuItem>
+    );
+  }
   return (
     <Collapsible className="group/collapsible">
       <SidebarMenuItem>

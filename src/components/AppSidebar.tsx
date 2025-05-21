@@ -10,28 +10,33 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { readCollections } from "@/lib/supabase/collection";
+import {
+  getCollectionsForUserId,
+  getPremadeCollections,
+} from "@/supabase/db/collection";
 
-import { ChevronUp, House, User2 } from "lucide-react";
+import { ChevronUp, House, Plus, User2 } from "lucide-react";
 import Link from "next/link";
 import CollectionSidebarItem from "./CollectionSidebarItem";
-import { getAllSubCollections } from "@/lib/supabase/subCollection";
+import { getAllSubCollections } from "@/supabase/db/subCollection";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { getUser } from "@/lib/supabase/user";
+import { getUser } from "@/supabase/db/user";
 import { Avatar, AvatarFallback } from "./ui/avatar";
 import { AvatarImage } from "@radix-ui/react-avatar";
 
 export default async function AppSidebar() {
-  const [collections, sub_collections, user] = await Promise.all([
-    readCollections(),
-    getAllSubCollections(),
-    getUser(),
-  ]);
+  const [collections, userCollections, sub_collections, user] =
+    await Promise.all([
+      getPremadeCollections(),
+      getCollectionsForUserId(),
+      getAllSubCollections(),
+      getUser(),
+    ]);
 
   return (
     <Sidebar variant="floating" collapsible="offcanvas">
@@ -48,6 +53,46 @@ export default async function AppSidebar() {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
+        <SidebarGroup>
+          <SidebarGroupLabel>Actions</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link href={`/home/create`}>
+                    <Plus />
+                    Create
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+        {userCollections && userCollections.length > 1 && (
+          <SidebarGroup>
+            <SidebarGroupLabel>Your Collections</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {userCollections &&
+                  userCollections.map((collection) => {
+                    const subCollectionsForCollection = sub_collections
+                      ? sub_collections.filter(
+                          (sub_collection) =>
+                            sub_collection.collection_id == collection.id
+                        )
+                      : [];
+                    return (
+                      <CollectionSidebarItem
+                        collection={collection}
+                        sub_collections={subCollectionsForCollection}
+                        key={collection.id}
+                      />
+                    );
+                  })}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        )}
         <SidebarGroup>
           <SidebarGroupLabel>Premade Collections</SidebarGroupLabel>
           <SidebarGroupContent>

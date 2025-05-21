@@ -1,8 +1,8 @@
 import { redirect } from "next/navigation";
 
 import CollectionCard from "@/components/CollectionCard";
-import { getCollectionById } from "@/lib/supabase/collection";
-import { getSubCollectionsByCollectionId } from "@/lib/supabase/subCollection";
+import { getCollectionById } from "@/supabase/db/collection";
+import { getSubCollectionsByCollectionId } from "@/supabase/db/subCollection";
 
 export default async function Page({
   params,

@@ -1,7 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/supabase/server";
 import { Provider } from "@supabase/auth-js";
 
 export async function signIn(provider: Provider) {

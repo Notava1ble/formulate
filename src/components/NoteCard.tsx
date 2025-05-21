@@ -1,5 +1,5 @@
-import { NoteType } from "@/lib/supabase/notes";
-import { SubCollectionType } from "@/lib/supabase/subCollection";
+import { NoteType } from "@/supabase/db/notes";
+import { SubCollectionType } from "@/supabase/db/subCollection";
 import Link from "next/link";
 import Icon from "./Icon";
 
