@@ -1,8 +1,11 @@
 "use server";
 
-import { CollectionType } from "@/supabase/db/collection";
+import { CollectionInsertType, CollectionType } from "@/supabase/db/collection";
 import { createClient } from "@/supabase/server";
-import { SubCollectionType } from "@/supabase/db/subCollection";
+import {
+  SubCollectionInsertType,
+  SubCollectionType,
+} from "@/supabase/db/subCollection";
 import { parseServerActionResponse } from "@/lib/utils";
 import { revalidatePath } from "next/cache";
 
@@ -12,9 +15,6 @@ interface FormValues {
   icon: string;
   subject?: string | undefined;
 }
-
-export type CollectionCreateType = Omit<CollectionType, "id" | "user_id">;
-export type SubCollectionCreateType = Omit<SubCollectionType, "id" | "user_id">;
 
 export interface rType {
   error: string;
@@ -27,7 +27,7 @@ export async function createCollectionServerAction(
 ): Promise<rType> {
   // If the parent Collection was not specified it creates a collection
   if (!formValues.collectionId) {
-    const row: CollectionCreateType = {
+    const row: CollectionInsertType = {
       name: formValues.name,
       icon: formValues.icon,
       subject: formValues.subject!,
@@ -59,7 +59,7 @@ export async function createCollectionServerAction(
       status: "SUCCESS",
     });
   }
-  const row: SubCollectionCreateType = {
+  const row: SubCollectionInsertType = {
     name: formValues.name,
     icon: formValues.icon,
     collection_id: formValues.collectionId,
