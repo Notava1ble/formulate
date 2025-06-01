@@ -68,7 +68,7 @@ export default async function AppSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
-        {userCollections && userCollections.length > 1 && (
+        {userCollections && userCollections.length >= 1 && (
           <SidebarGroup>
             <SidebarGroupLabel>Your Collections</SidebarGroupLabel>
             <SidebarGroupContent>

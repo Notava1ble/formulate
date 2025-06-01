@@ -24,14 +24,10 @@ const Page = async ({
       <SearchBar query={query} />
 
       {/* Content Page */}
-      <div className="flex-col-center mt-36">
-        {/* <h2 className="text-2xl font-poppins font-medium">
-          ---Look out some premade Collections---
-        </h2> */}
-        <Suspense fallback={<LoadingCards />}>
-          <CardList />
-        </Suspense>
-      </div>
+
+      <Suspense fallback={<LoadingCards />}>
+        <CardList />
+      </Suspense>
     </div>
   );
 };

@@ -52,7 +52,7 @@ export async function createCollectionServerAction(
       });
     }
 
-    revalidatePath("/home");
+    revalidatePath("/home", "layout");
     return parseServerActionResponse({
       error: "",
       data: data[0],
@@ -79,7 +79,7 @@ export async function createCollectionServerAction(
       status: "ERROR",
     });
   }
-  revalidatePath("/home");
+  revalidatePath("/home", "layout");
 
   return parseServerActionResponse({
     error: "",
