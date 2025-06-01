@@ -6,6 +6,7 @@ import { Check, LoaderCircle, PencilLine } from "lucide-react";
 import { useActionState, useState } from "react";
 import { z } from "zod";
 import { updateCollectionNameAction } from "@/lib/actions";
+import { SubCollectionType } from "@/supabase/db/subCollection";
 
 interface FormErrors {
   name?: string[];
@@ -22,7 +23,13 @@ const nameEditSchema = z.object({
   parentId: z.number().optional(),
 });
 
-const CollectionTitle = ({ collection }: { collection: CollectionType }) => {
+const CollectionTitle = ({
+  collection,
+  parentCollection,
+}: {
+  collection: CollectionType | SubCollectionType;
+  parentCollection?: CollectionType;
+}) => {
   const [activeForm, setActiveForm] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
 
@@ -30,9 +37,19 @@ const CollectionTitle = ({ collection }: { collection: CollectionType }) => {
   const handleFormSubmit = async (prevState: any, formData: FormData) => {
     try {
       const name = formData.get("name") as string | undefined;
+      if (name == collection.name) {
+        setActiveForm(false);
+        return {
+          ...prevState,
+          error: "Name wasnt changed",
+          status: "ERROR",
+        };
+      }
+
       const formValues = {
         name: name,
         collectionId: collection.id,
+        parentId: parentCollection?.id,
       };
 
       console.log(formValues);
@@ -80,7 +97,7 @@ const CollectionTitle = ({ collection }: { collection: CollectionType }) => {
 
   if (activeForm) {
     return (
-      <div className="w-full flex items-end justify-center p-24 pt-32">
+      <div className="w-full flex items-end justify-center p-24 pt-29">
         <form className="group flex-center relative" action={formAction}>
           <input
             className="w-min border-b-1 border-zinc-700 text-6xl font-semibold font-poppins outline-none focus:outline-none"

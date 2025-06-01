@@ -4,6 +4,7 @@ import NoteCard from "@/components/NoteCard";
 import { getCollectionById } from "@/supabase/db/collection";
 import { getSubCollectionById } from "@/supabase/db/subCollection";
 import { getNotesBySubCollectionId } from "@/supabase/db/notes";
+import CollectionTitle from "@/components/CollectionTitle";
 
 export default async function Page({
   params,
@@ -23,11 +24,10 @@ export default async function Page({
 
   return (
     <div className="p-6">
-      <div className=" w-full flex-center p-24 pt-32">
-        <h1 className="text-6xl font-semibold font-poppins">
-          {sub_collection.name}
-        </h1>
-      </div>
+      <CollectionTitle
+        collection={sub_collection}
+        parentCollection={collection}
+      />
       <div className="flex-col-center mt-12">
         <div className="w-full grid grid-cols-2 gap-8 mt-16 px-4">
           {notes &&
