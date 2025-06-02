@@ -54,3 +54,44 @@ export const updateCollectionNameAction = async (
     status: "SUCCESS",
   };
 };
+
+export const deleteCollectionAction = async (
+  collectionId: number,
+  parentId?: number
+): Promise<rType> => {
+  "use server";
+  const supabase = await createClient();
+  if (parentId) {
+    const { error } = await supabase
+      .from("sub_collections")
+      .delete()
+      .eq("id", collectionId);
+
+    if (error) {
+      return { error: error.message, data: "", status: "ERROR" };
+    }
+
+    revalidatePath(`/home/${collectionId}`);
+    return {
+      error: "",
+      data: "Subcollection deleted successfully",
+      status: "SUCCESS",
+    };
+  }
+
+  const { error } = await supabase
+    .from("collections")
+    .delete()
+    .eq("id", collectionId);
+
+  if (error) {
+    return { error: error.message, data: "", status: "ERROR" };
+  }
+  revalidatePath("/home");
+  revalidatePath(`/home/${collectionId}`);
+  return {
+    error: "",
+    data: "Collection deleted successfully",
+    status: "SUCCESS",
+  };
+};

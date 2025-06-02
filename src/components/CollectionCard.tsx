@@ -3,16 +3,19 @@ import { SubCollectionType } from "@/supabase/db/subCollection";
 import Link from "next/link";
 
 import Icon from "./Icon";
+import CollectionCardOptions from "./CollectionCardOptions";
 
 const CollectionCard = ({
   collection,
+  parentId,
   href,
 }: {
   collection: CollectionType | SubCollectionType;
+  parentId?: number;
   href: string;
 }) => {
   return (
-    <div className="bg-zinc-800 rounded-md hover:scale-102 transition-all">
+    <div className="bg-zinc-800 rounded-md hover:scale-102 transition-all group relative">
       <Link
         href={href}
         className="p-6 py-8 flex justify-start items-center gap-8 animate-fade-in"
@@ -24,6 +27,8 @@ const CollectionCard = ({
           <h1 className="text-3xl font-poppins font-bold">{collection.name}</h1>
         </div>
       </Link>
+
+      <CollectionCardOptions collectionId={collection.id} parentId={parentId} />
     </div>
   );
 };

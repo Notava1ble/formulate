@@ -31,6 +31,7 @@ export default async function Page({
                 <CollectionCard
                   key={subC.id}
                   collection={subC}
+                  parentId={collection.id}
                   href={`/home/${collection.id}/${subC.id}`}
                 />
               );
