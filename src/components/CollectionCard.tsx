@@ -8,10 +8,12 @@ import CollectionCardOptions from "./CollectionCardOptions";
 const CollectionCard = ({
   collection,
   parentId,
+  isPremade,
   href,
 }: {
   collection: CollectionType | SubCollectionType;
   parentId?: number;
+  isPremade: boolean;
   href: string;
 }) => {
   return (
@@ -28,7 +30,12 @@ const CollectionCard = ({
         </div>
       </Link>
 
-      <CollectionCardOptions collectionId={collection.id} parentId={parentId} />
+      {!isPremade && (
+        <CollectionCardOptions
+          collectionId={collection.id}
+          parentId={parentId}
+        />
+      )}
     </div>
   );
 };

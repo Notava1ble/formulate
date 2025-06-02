@@ -24,6 +24,7 @@ const CardList = async () => {
                 <CollectionCard
                   key={collection.id}
                   collection={collection}
+                  isPremade={false}
                   href={`/home/${collection.id}`}
                 />
               );
@@ -43,6 +44,7 @@ const CardList = async () => {
                 <CollectionCard
                   key={collection.id}
                   collection={collection}
+                  isPremade={true}
                   href={`/home/${collection.id}`}
                 />
               );
