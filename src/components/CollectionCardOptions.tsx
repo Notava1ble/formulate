@@ -7,10 +7,23 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { useActionState, useState } from "react";
 import { cn } from "@/lib/utils";
 import { deleteCollectionAction } from "@/lib/actions";
+import { Button } from "./ui/button";
 
+// TODO: Add a dialog for confirming delete
 const CollectionCardOptions = ({
   collectionId,
   parentId,
@@ -52,33 +65,50 @@ const CollectionCardOptions = ({
         open && "opacity-100"
       )}
     >
-      <DropdownMenu open={open} onOpenChange={setOpen}>
-        <DropdownMenuTrigger>
-          <MoreVertical />
-        </DropdownMenuTrigger>
-        <DropdownMenuContent>
-          <DropdownMenuItem>
-            <Edit />
-            Edit
-          </DropdownMenuItem>
-          <form action={formAction}>
-            <DropdownMenuItem
-              variant="destructive"
-              disabled={isPending}
-              asChild
-            >
-              <button
-                type="submit"
-                className="w-full h-full flex items-center"
-                disabled={isPending}
-              >
-                <Trash className="mr-2 h-4 w-4" />
-                {isPending ? "Deleting..." : "Delete"}
-              </button>
+      <AlertDialog>
+        <DropdownMenu open={open} onOpenChange={setOpen}>
+          <DropdownMenuTrigger>
+            <MoreVertical />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem>
+              <Edit />
+              Edit
             </DropdownMenuItem>
-          </form>
-        </DropdownMenuContent>
-      </DropdownMenu>
+            <AlertDialogTrigger asChild>
+              <DropdownMenuItem variant="destructive" disabled={isPending}>
+                <Trash />
+                Delete
+              </DropdownMenuItem>
+            </AlertDialogTrigger>
+          </DropdownMenuContent>
+        </DropdownMenu>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete this
+              collection and allof its children
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <form action={formAction}>
+              <AlertDialogAction disabled={isPending} asChild>
+                <Button
+                  type="submit"
+                  disabled={isPending}
+                  variant="destructive"
+                  className="text-white"
+                >
+                  <Trash />
+                  {isPending ? "Deleting..." : "Delete"}
+                </Button>
+              </AlertDialogAction>
+            </form>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };

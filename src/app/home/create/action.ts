@@ -22,6 +22,7 @@ export interface rType {
   status: "SUCCESS" | "ERROR";
 }
 
+// TODO: Make it so when creating a subcollection, a check is made to ensure the collectionId is one that the user created
 export async function createCollectionServerAction(
   formValues: FormValues
 ): Promise<rType> {
