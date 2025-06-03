@@ -9,16 +9,14 @@ import {
 } from "./ui/dropdown-menu";
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { deleteCollectionAction } from "@/lib/actions";
 import { Button } from "./ui/button";
@@ -32,6 +30,9 @@ const CollectionCardOptions = ({
   parentId?: number;
 }) => {
   const [open, setOpen] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   const handleDelete = async (
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -51,11 +52,21 @@ const CollectionCardOptions = ({
     };
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [state, formAction, isPending] = useActionState(handleDelete, {
     error: "",
     status: "INITIAL",
   });
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout | undefined;
+    if (!isPending && state.status === "SUCCESS") {
+      timer = setTimeout(() => {
+        console.log("Timeout finished: Closing dialog.");
+        setIsDeleteDialogOpen(false);
+      }, 500);
+    }
+    return () => clearTimeout(timer);
+  }, [isPending, state.status]);
 
   return (
     <div
@@ -65,50 +76,67 @@ const CollectionCardOptions = ({
         open && "opacity-100"
       )}
     >
-      <AlertDialog>
-        <DropdownMenu open={open} onOpenChange={setOpen}>
-          <DropdownMenuTrigger>
-            <MoreVertical />
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem>
-              <Edit />
-              Edit
-            </DropdownMenuItem>
-            <AlertDialogTrigger asChild>
-              <DropdownMenuItem variant="destructive" disabled={isPending}>
-                <Trash />
-                Delete
-              </DropdownMenuItem>
-            </AlertDialogTrigger>
-          </DropdownMenuContent>
-        </DropdownMenu>
+      <DropdownMenu open={open} onOpenChange={setOpen}>
+        <DropdownMenuTrigger>
+          <MoreVertical />
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuItem>
+            <Edit />
+            Edit
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            variant="destructive"
+            disabled={isPending}
+            onClick={() => setIsDeleteDialogOpen(true)}
+          >
+            <Trash />
+            Delete
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      {/* DELETE DIALOG */}
+      <AlertDialog
+        open={isDeleteDialogOpen}
+        onOpenChange={(open) => {
+          if (!isPending) {
+            setIsDeleteDialogOpen(open);
+          }
+        }}
+      >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete this
-              collection and allof its children
+              {state.status === "ERROR" && state.error
+                ? `Error: ${state.error}`
+                : state.status === "INITIAL" || isPending
+                ? `This action cannot be undone. This will permanently delete this
+              collection and all of its children.`
+                : state.status === "SUCCESS"
+                ? "Collection deleted successfully!"
+                : "Preparing to delete..."}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <form action={formAction}>
-              <AlertDialogAction disabled={isPending} asChild>
-                <Button
-                  type="submit"
-                  disabled={isPending}
-                  variant="destructive"
-                  className="text-white"
-                >
-                  <Trash />
-                  {isPending ? "Deleting..." : "Delete"}
-                </Button>
-              </AlertDialogAction>
+              <Button
+                type="submit"
+                disabled={isPending}
+                variant="destructive"
+                className="text-white"
+              >
+                <Trash />
+                {isPending ? "Deleting..." : "Delete"}
+              </Button>
             </form>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* EDIT DIALOG */}
     </div>
   );
 };
