@@ -4,15 +4,6 @@ import SearchedIcons, { SvgIcon } from "@/components/SearchedIcons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { CollectionType } from "@/supabase/db/collection";
 import {
   FormCollectionFieldErrors,
@@ -23,6 +14,7 @@ import { useActionState, useState } from "react";
 import { z } from "zod";
 import { createCollectionServerAction } from "./action";
 import { useRouter } from "next/navigation";
+import ParentCollectionSelector from "@/components/ParentCollectionSelector";
 
 const CreateCollectionForm = ({
   collections,
@@ -110,62 +102,11 @@ const CreateCollectionForm = ({
     <form action={formAction} className="mt-20 px-16">
       <div className="w-full flex gap-2">
         <div className="flex-1">
-          <div className="flex flex-col justify-center items-start gap-2 w-full max-w-md">
-            <Label htmlFor="parentCollection">Parent Collection</Label>
-            <div className="flex-center gap-2 w-full">
-              <Select
-                value={parentCollection?.name || ""}
-                onValueChange={(value) => {
-                  setParentCollection(
-                    collections?.find((collection) => value == collection.name)
-                  );
-                }}
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue
-                    placeholder="Select a Parent Collection"
-                    id="parentCollection"
-                  />
-                </SelectTrigger>
-                <SelectContent className="max-h-60 overflow-y-auto">
-                  <SelectGroup>
-                    <SelectLabel>Collections</SelectLabel>
-                    {collections &&
-                      collections.map((collection) => (
-                        <SelectItem value={collection.name} key={collection.id}>
-                          {collection.name}
-                        </SelectItem>
-                      ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-              <input
-                type="hidden"
-                name="email"
-                value={parentCollection?.name || ""}
-              />
-
-              {parentCollection ? (
-                <Button
-                  size="icon"
-                  variant="outline"
-                  onClick={() => setParentCollection(undefined)}
-                >
-                  <X />
-                </Button>
-              ) : (
-                <Button
-                  size="icon"
-                  variant="outline"
-                  className="disabled:pointer-events-auto disabled:hover:cursor-not-allowed"
-                  disabled
-                >
-                  <X />
-                </Button>
-              )}
-            </div>
-            <p className="invisible">{"\u00A0"}</p>
-          </div>
+          <ParentCollectionSelector
+            parentCollection={parentCollection}
+            setParentCollection={setParentCollection}
+            collections={collections}
+          />
           <div className="mt-6 grid w-full max-w-md items-center gap-1.5">
             <Label htmlFor="name">Collection Name</Label>
             <Input

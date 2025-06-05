@@ -16,23 +16,41 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { useActionState, useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { deleteCollectionAction } from "@/lib/actions";
 import { Button } from "./ui/button";
+import { Label } from "./ui/label";
+import { Input } from "./ui/input";
+import { SubCollectionType } from "@/supabase/db/subCollection";
+import { CollectionType } from "@/supabase/db/collection";
+import ParentCollectionSelector from "./ParentCollectionSelector";
 
 // TODO: Add a dialog for confirming delete
 const CollectionCardOptions = ({
-  collectionId,
+  collection,
   parentId,
+  allUserCollections,
 }: {
-  collectionId: number;
+  collection: CollectionType | SubCollectionType;
   parentId?: number;
+  allUserCollections: CollectionType[] | null;
 }) => {
   const [open, setOpen] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+
+  const [parentCollection, setParentCollection] = useState<
+    CollectionType | undefined
+  >(undefined);
 
   const handleDelete = async (
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -40,9 +58,9 @@ const CollectionCardOptions = ({
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     formData: FormData
   ) => {
-    console.log(collectionId, parentId);
+    console.log(collection.id, parentId);
 
-    const response = await deleteCollectionAction(collectionId, parentId);
+    const response = await deleteCollectionAction(collection.id, parentId);
 
     console.log(response);
 
@@ -81,7 +99,10 @@ const CollectionCardOptions = ({
           <MoreVertical />
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-          <DropdownMenuItem>
+          <DropdownMenuItem
+            disabled={isPending}
+            onClick={() => setIsEditDialogOpen(true)}
+          >
             <Edit />
             Edit
           </DropdownMenuItem>
@@ -137,6 +158,42 @@ const CollectionCardOptions = ({
       </AlertDialog>
 
       {/* EDIT DIALOG */}
+      <Dialog
+        open={isEditDialogOpen}
+        onOpenChange={(open) => {
+          if (!isPending) {
+            setIsEditDialogOpen(open);
+          }
+        }}
+      >
+        <form>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Edit</DialogTitle>
+              <DialogDescription>
+                Edit Collection ({collection.name})
+              </DialogDescription>
+            </DialogHeader>
+            <div className="mt-4">
+              <ParentCollectionSelector
+                collections={allUserCollections}
+                parentCollection={parentCollection}
+                setParentCollection={setParentCollection}
+              />
+              <div className="w-full flex flex-col items-start justify-center gap-2 max-w-md">
+                <Label htmlFor="name">Name</Label>
+                <Input
+                  type="name"
+                  id="name"
+                  name="name"
+                  defaultValue={collection.name}
+                />
+              </div>
+            </div>
+            <DialogFooter></DialogFooter>
+          </DialogContent>
+        </form>
+      </Dialog>
     </div>
   );
 };

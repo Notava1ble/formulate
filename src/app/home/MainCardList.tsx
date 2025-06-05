@@ -33,6 +33,7 @@ const CardList = async () => {
                     collection={collection}
                     isPremade={false}
                     href={`/home/${collection.id}`}
+                    allUserCollections={userCollections}
                   />
                 );
               })}
@@ -60,6 +61,7 @@ const CardList = async () => {
                   collection={collection}
                   isPremade={true}
                   href={`/home/${collection.id}`}
+                  allUserCollections={userCollections}
                 />
               );
             })}

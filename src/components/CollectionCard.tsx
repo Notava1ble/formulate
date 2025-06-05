@@ -9,11 +9,13 @@ const CollectionCard = ({
   collection,
   parentId,
   isPremade,
+  allUserCollections,
   href,
 }: {
   collection: CollectionType | SubCollectionType;
   parentId?: number;
   isPremade: boolean;
+  allUserCollections: CollectionType[] | null;
   href: string;
 }) => {
   return (
@@ -32,8 +34,9 @@ const CollectionCard = ({
 
       {!isPremade && (
         <CollectionCardOptions
-          collectionId={collection.id}
+          collection={collection}
           parentId={parentId}
+          allUserCollections={allUserCollections}
         />
       )}
     </div>
