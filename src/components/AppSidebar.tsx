@@ -10,34 +10,19 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import {
-  getCollectionsForUserId,
-  getPremadeCollections,
-} from "@/supabase/db/collection";
 
-import { ChevronUp, House, Plus, User2 } from "lucide-react";
+import { House, Plus } from "lucide-react";
 import Link from "next/link";
-import CollectionSidebarItem from "./CollectionSidebarItem";
-import { getAllSubCollections } from "@/supabase/db/subCollection";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { getUser } from "@/supabase/db/user";
-import { Avatar, AvatarFallback } from "./ui/avatar";
-import { AvatarImage } from "@radix-ui/react-avatar";
+import SideBarCollectionGroup from "./SideBarCollectionGroup";
+import SidebarUserItem from "./SidebarUserItem";
 
-export default async function AppSidebar() {
-  const [collections, userCollections, sub_collections, user] =
-    await Promise.all([
-      getPremadeCollections(),
-      getCollectionsForUserId(),
-      getAllSubCollections(),
-      getUser(),
-    ]);
-
+export default function AppSidebar() {
   return (
     <Sidebar variant="floating" collapsible="offcanvas">
       <SidebarHeader>
@@ -68,70 +53,15 @@ export default async function AppSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
-        {userCollections && userCollections.length >= 1 && (
-          <SidebarGroup>
-            <SidebarGroupLabel>Your Collections</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                {userCollections &&
-                  userCollections.map((collection) => {
-                    const subCollectionsForCollection = sub_collections
-                      ? sub_collections.filter(
-                          (sub_collection) =>
-                            sub_collection.collection_id == collection.id
-                        )
-                      : [];
-                    return (
-                      <CollectionSidebarItem
-                        collection={collection}
-                        sub_collections={subCollectionsForCollection}
-                        key={collection.id}
-                      />
-                    );
-                  })}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        )}
-        <SidebarGroup>
-          <SidebarGroupLabel>Premade Collections</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {collections &&
-                collections.map((collection) => {
-                  const subCollectionsForCollection = sub_collections
-                    ? sub_collections.filter(
-                        (sub_collection) =>
-                          sub_collection.collection_id == collection.id
-                      )
-                    : [];
-                  return (
-                    <CollectionSidebarItem
-                      collection={collection}
-                      sub_collections={subCollectionsForCollection}
-                      key={collection.id}
-                    />
-                  );
-                })}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+        <SideBarCollectionGroup type="user-created" />
+        <SideBarCollectionGroup type="premade" />
       </SidebarContent>
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <SidebarMenuButton>
-                  <Avatar>
-                    <AvatarImage src={user?.user_metadata.avatar_url} />
-                    <AvatarFallback>
-                      <User2 />
-                    </AvatarFallback>
-                  </Avatar>
-                  {user?.user_metadata.full_name}
-                  <ChevronUp className="ml-auto" />
-                </SidebarMenuButton>
+                <SidebarUserItem />
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 side="top"

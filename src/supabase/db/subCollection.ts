@@ -84,3 +84,18 @@ export async function getSubCollectionsForUserId() {
   }
   return null;
 }
+
+export async function getPremadeSubCollections() {
+  const supabase = await createClient();
+
+  const { data: subCollections, error } = await supabase
+    .from("sub_collections")
+    .select("*")
+    .is("user_id", null);
+  //TODO: handle errors better
+  if (error) {
+    return null;
+  }
+
+  return subCollections as SubCollectionType[];
+}

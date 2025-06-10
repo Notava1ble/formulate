@@ -10,6 +10,8 @@ export interface SessionDataContextType {
   user: User;
   collections: CollectionType[];
   subCollections: SubCollectionType[];
+  premadeCollections: CollectionType[];
+  premadeSubCollections: SubCollectionType[];
   notes: NoteType[];
 }
 
