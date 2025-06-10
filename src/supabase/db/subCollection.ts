@@ -65,3 +65,22 @@ export async function getAllSubCollections(): Promise<
   }
   return sub_collections as SubCollectionType[];
 }
+
+export async function getSubCollectionsForUserId() {
+  const supabase = await createClient();
+  const userId = (await supabase.auth.getUser()).data.user?.id;
+
+  if (userId) {
+    const { data: subCollections, error } = await supabase
+      .from("sub_collections")
+      .select("*")
+      .eq("user_id", userId);
+    //TODO: handle errors better
+    if (error) {
+      return null;
+    }
+
+    return subCollections as SubCollectionType[];
+  }
+  return null;
+}

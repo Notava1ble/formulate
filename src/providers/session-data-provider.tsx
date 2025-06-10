@@ -19,7 +19,7 @@ const SessionDataContext = createContext<SessionDataContextType | null>(null);
 // Create the Provider component
 interface SessionDataProviderProps {
   children: ReactNode;
-  initialData: SessionDataContextType; // The data we fetch on the server
+  initialData: SessionDataContextType | null; // The data we fetch on the server
 }
 
 export function SessionDataProvider({
