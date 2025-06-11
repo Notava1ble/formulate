@@ -27,6 +27,16 @@ export async function getUserData(): Promise<SessionDataContextType | null> {
     getPremadeSubCollections(),
   ]);
 
+  // TODO: Make it not break when one of these is false
+  console.log(
+    user && "yes",
+    collections && "yes",
+    subCollections && "yes",
+    notes && "yes",
+    premadeCollections && "yes",
+    premadeSubCollections && "yes"
+  );
+
   if (
     user &&
     collections &&

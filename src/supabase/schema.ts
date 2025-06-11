@@ -41,6 +41,7 @@ export type Database = {
           sub_collection_id: number;
           symbols: Json;
           theory: string;
+          user_id: string | null;
         };
         Insert: {
           id?: number;
@@ -49,6 +50,7 @@ export type Database = {
           sub_collection_id: number;
           symbols?: Json;
           theory: string;
+          user_id?: string | null;
         };
         Update: {
           id?: number;
@@ -57,6 +59,7 @@ export type Database = {
           sub_collection_id?: number;
           symbols?: Json;
           theory?: string;
+          user_id?: string | null;
         };
         Relationships: [
           {

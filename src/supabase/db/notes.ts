@@ -13,6 +13,7 @@ export interface NoteType {
     symbol: string;
     explanation: string;
   }>;
+  user_id: string;
 }
 
 export async function getNoteById(id: string): Promise<NoteType | null> {

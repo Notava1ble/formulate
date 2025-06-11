@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import {
   Collapsible,
@@ -15,7 +17,7 @@ import { CollectionType } from "@/supabase/db/collection";
 import { SubCollectionType } from "@/supabase/db/subCollection";
 import Icon from "./Icon";
 
-const CollectionSidebarItem = async ({
+const CollectionSidebarItem = ({
   collection,
   sub_collections,
 }: {
@@ -38,11 +40,9 @@ const CollectionSidebarItem = async ({
     <Collapsible className="group/collapsible">
       <SidebarMenuItem>
         <CollapsibleTrigger asChild>
-          <SidebarMenuButton asChild>
-            <div>
-              <Icon iconName={collection.icon} className="" />
-              <span>{collection.name}</span>
-            </div>
+          <SidebarMenuButton>
+            <Icon iconName={collection.icon} className="" />
+            <span>{collection.name}</span>
           </SidebarMenuButton>
         </CollapsibleTrigger>
         <CollapsibleContent>
