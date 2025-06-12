@@ -16,11 +16,7 @@ import { createCollectionServerAction } from "./action";
 import { useRouter } from "next/navigation";
 import ParentCollectionSelector from "@/components/ParentCollectionSelector";
 
-const CreateCollectionForm = ({
-  collections,
-}: {
-  collections: CollectionType[] | null;
-}) => {
+const CreateCollectionForm = () => {
   // TODO: Show the errors to the user
   const [errors, setErrors] = useState<FormCollectionFieldErrors>({});
   const [parentCollection, setParentCollection] = useState<
@@ -105,7 +101,6 @@ const CreateCollectionForm = ({
           <ParentCollectionSelector
             parentCollection={parentCollection}
             setParentCollection={setParentCollection}
-            collections={collections}
           />
           <div className="mt-6 grid w-full max-w-md items-center gap-1.5">
             <Label htmlFor="name">Collection Name</Label>

@@ -1,9 +1,6 @@
-import { getCollectionsForUserId } from "@/supabase/db/collection";
 import CreateCollectionForm from "./CreateCollectionForm";
 
-const Page = async () => {
-  const collections = await getCollectionsForUserId();
-
+const Page = () => {
   return (
     <div className="p-6">
       <div className="w-full flex-center mt-32">
@@ -11,7 +8,7 @@ const Page = async () => {
           Create a Collection
         </h1>
       </div>
-      <CreateCollectionForm collections={collections} />
+      <CreateCollectionForm />
     </div>
   );
 };
