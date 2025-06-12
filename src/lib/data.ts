@@ -1,35 +1,21 @@
 import { SessionDataContextType } from "@/providers/session-data-provider";
-import {
-  getCollectionsForUserId,
-  getPremadeCollections,
-} from "@/supabase/db/collection";
-import { getNotesForUserId } from "@/supabase/db/notes";
-import {
-  getPremadeSubCollections,
-  getSubCollectionsForUserId,
-} from "@/supabase/db/subCollection";
-import { getUser } from "@/supabase/db/user";
+import { getAllUserData, getUser } from "@/supabase/db/user";
 
 export async function getUserData(): Promise<SessionDataContextType | null> {
-  const [
-    user,
+  const [data, userData] = await Promise.all([getAllUserData(), getUser()]);
+  if (!data) return null;
+
+  const {
     collections,
-    subCollections,
+    sub_collections: subCollections,
+    premade_collections: premadeCollections,
+    premade_sub_collections: premadeSubCollections,
     notes,
-    premadeCollections,
-    premadeSubCollections,
-  ] = await Promise.all([
-    getUser(),
-    getCollectionsForUserId(),
-    getSubCollectionsForUserId(),
-    getNotesForUserId(),
-    getPremadeCollections(),
-    getPremadeSubCollections(),
-  ]);
+  } = data;
 
   // TODO: Make it not break when one of these is false
   console.log(
-    user && "yes",
+    userData && "yes",
     collections && "yes",
     subCollections && "yes",
     notes && "yes",
@@ -37,16 +23,9 @@ export async function getUserData(): Promise<SessionDataContextType | null> {
     premadeSubCollections && "yes"
   );
 
-  if (
-    user &&
-    collections &&
-    subCollections &&
-    notes &&
-    premadeCollections &&
-    premadeSubCollections
-  ) {
+  if (userData && data) {
     return {
-      user,
+      user: userData,
       collections,
       subCollections,
       premadeCollections,

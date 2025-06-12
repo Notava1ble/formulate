@@ -14,16 +14,17 @@ import {
 } from "./ui/select";
 import { Dispatch, SetStateAction } from "react";
 import { X } from "lucide-react";
+import { useSessionData } from "@/providers/session-data-provider";
 
 const ParentCollectionSelector = ({
   parentCollection,
   setParentCollection,
-  collections,
 }: {
   parentCollection: CollectionType | undefined;
   setParentCollection: Dispatch<SetStateAction<CollectionType | undefined>>;
-  collections: CollectionType[] | null;
 }) => {
+  const { collections } = useSessionData();
+
   return (
     <div className="flex flex-col justify-center items-start gap-2 w-full max-w-md">
       <Label htmlFor="parentCollection">Parent Collection</Label>

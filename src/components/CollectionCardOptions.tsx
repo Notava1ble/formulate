@@ -38,11 +38,9 @@ import ParentCollectionSelector from "./ParentCollectionSelector";
 const CollectionCardOptions = ({
   collection,
   parentId,
-  allUserCollections,
 }: {
   collection: CollectionType | SubCollectionType;
   parentId?: number;
-  allUserCollections: CollectionType[] | null;
 }) => {
   const [open, setOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -176,7 +174,6 @@ const CollectionCardOptions = ({
             </DialogHeader>
             <div className="mt-4">
               <ParentCollectionSelector
-                collections={allUserCollections}
                 parentCollection={parentCollection}
                 setParentCollection={setParentCollection}
               />

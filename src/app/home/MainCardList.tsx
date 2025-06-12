@@ -29,7 +29,6 @@ const CardList = () => {
                     collection={collection}
                     isPremade={false}
                     href={`/home/${collection.id}`}
-                    allUserCollections={userCollections}
                   />
                 );
               })}
@@ -57,7 +56,6 @@ const CardList = () => {
                   collection={collection}
                   isPremade={true}
                   href={`/home/${collection.id}`}
-                  allUserCollections={userCollections}
                 />
               );
             })}

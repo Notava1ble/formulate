@@ -1,10 +1,7 @@
-import { redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 
 import CollectionCard from "@/components/CollectionCard";
-import {
-  getCollectionById,
-  getCollectionsForUserId,
-} from "@/supabase/db/collection";
+import { getCollectionById } from "@/supabase/db/collection";
 import { getSubCollectionsByCollectionId } from "@/supabase/db/subCollection";
 import CollectionTitle from "@/components/CollectionTitle";
 
@@ -16,13 +13,12 @@ export default async function Page({
   const { collectionId } = await params;
 
   // Fetch collection and sub_collections in parallel
-  const [allUserCollections, collection, sub_collections] = await Promise.all([
-    getCollectionsForUserId(),
+  const [collection, sub_collections] = await Promise.all([
     getCollectionById(collectionId),
     getSubCollectionsByCollectionId(collectionId),
   ]);
 
-  if (!collection) redirect("/not-found");
+  if (!collection) notFound();
 
   return (
     <div className="p-6">
@@ -38,7 +34,6 @@ export default async function Page({
                   isPremade={collection.user_id === null}
                   parentId={collection.id}
                   href={`/home/${collection.id}/${subC.id}`}
-                  allUserCollections={allUserCollections}
                 />
               );
             })}

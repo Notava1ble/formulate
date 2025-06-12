@@ -1,3 +1,5 @@
+import { NoteType } from "./db/notes";
+
 export type Json =
   | string
   | number
@@ -109,14 +111,13 @@ export type Database = {
     };
     Functions: {
       get_user_and_collections: {
-        Args: { user_id: number };
+        Args: Record<PropertyKey, never>;
         Returns: {
-          user_data: Json;
-          collections: Json;
-          sub_collections: Json;
-          notes: Json;
-          premade_collections: Json;
-          premade_sub_collections: Json;
+          collections: Database["public"]["Tables"]["collections"]["Row"][];
+          sub_collections: Database["public"]["Tables"]["sub_collections"]["Row"][];
+          notes: NoteType[];
+          premade_collections: Database["public"]["Tables"]["collections"]["Row"][];
+          premade_sub_collections: Database["public"]["Tables"]["sub_collections"]["Row"][];
         }[];
       };
     };
