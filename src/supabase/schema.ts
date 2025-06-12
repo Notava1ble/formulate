@@ -108,7 +108,17 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
-      [_ in never]: never;
+      get_user_and_collections: {
+        Args: { user_id: number };
+        Returns: {
+          user_data: Json;
+          collections: Json;
+          sub_collections: Json;
+          notes: Json;
+          premade_collections: Json;
+          premade_sub_collections: Json;
+        }[];
+      };
     };
     Enums: {
       [_ in never]: never;
