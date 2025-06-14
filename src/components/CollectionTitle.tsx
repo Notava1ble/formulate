@@ -8,20 +8,8 @@ import { z } from "zod";
 import { updateCollectionNameAction } from "@/lib/actions";
 import { SubCollectionType } from "@/supabase/db/subCollection";
 
-interface FormErrors {
-  name?: string[];
-  parentId?: string[];
-  collectionId?: string[];
-}
-
-const nameEditSchema = z.object({
-  name: z
-    .string()
-    .min(3, { message: "Name must be at least 3 characters long" })
-    .max(32, { message: "Name must be at most 32 characters long" }),
-  collectionId: z.number(),
-  parentId: z.number().optional(),
-});
+import { nameEditSchema } from "@/lib/validation";
+import { FormCollectionNameEditErrors as FormErrors } from "@/lib/validation";
 
 const CollectionTitle = ({
   collection,

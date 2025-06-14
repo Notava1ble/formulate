@@ -12,7 +12,7 @@ export interface FormCollectionFieldErrors {
 }
 export const formCollectionSchema = z
   .object({
-    collectionId: z.number().optional(),
+    collectionId: z.number().int().positive().optional(),
     name: z
       .string()
       .min(3, { message: "Name must be at least 3 characters long" })
@@ -38,3 +38,23 @@ export const formCollectionSchema = z
       path: ["subject"],
     }
   );
+
+export interface FormCollectionNameEditErrors {
+  name?: string[];
+  parentId?: string[];
+  collectionId?: string[];
+}
+
+export const nameEditSchema = z.object({
+  name: z
+    .string()
+    .min(3, { message: "Name must be at least 3 characters long" })
+    .max(32, { message: "Name must be at most 32 characters long" }),
+  collectionId: z.number().int().positive(),
+  parentId: z.number().int().positive().optional(),
+});
+
+export const deleteCollectionSchema = z.object({
+  collectionId: z.number().int().positive(),
+  parentId: z.number().int().positive().optional(),
+});
