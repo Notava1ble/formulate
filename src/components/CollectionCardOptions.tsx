@@ -24,7 +24,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useActionState, useEffect, useState } from "react";
+import { useActionState, useState } from "react";
 import { cn } from "@/lib/utils";
 import { deleteCollectionAction } from "@/lib/actions";
 import { Button } from "./ui/button";
@@ -72,17 +72,6 @@ const CollectionCardOptions = ({
     error: "",
     status: "INITIAL",
   });
-
-  useEffect(() => {
-    let timer: NodeJS.Timeout | undefined;
-    if (!isPending && state.status === "SUCCESS") {
-      timer = setTimeout(() => {
-        console.log("Timeout finished: Closing dialog.");
-        setIsDeleteDialogOpen(false);
-      }, 500);
-    }
-    return () => clearTimeout(timer);
-  }, [isPending, state.status]);
 
   return (
     <div
