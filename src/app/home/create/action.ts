@@ -8,6 +8,8 @@ import {
 } from "@/supabase/db/subCollection";
 import { parseServerActionResponse } from "@/lib/utils";
 import { revalidatePath } from "next/cache";
+import { formCollectionSchema } from "@/lib/validation";
+import { doesUserOwnThisCollection } from "@/supabase/db/user";
 
 interface FormValues {
   collectionId?: number | undefined;
@@ -22,10 +24,26 @@ export interface rType {
   status: "SUCCESS" | "ERROR";
 }
 
-// TODO: Make it so when creating a subcollection, a check is made to ensure the collectionId is one that the user created
 export async function createCollectionServerAction(
   formValues: FormValues
 ): Promise<rType> {
+  // Validate the form values on the server for security and consistency
+  const validation = formCollectionSchema.safeParse(formValues);
+  if (!validation.success) {
+    console.error("Validation Error:", validation.error);
+    return parseServerActionResponse({
+      error: "Invalid data provided.",
+      data: "",
+      status: "ERROR",
+    });
+  }
+
+  // Create a Supabase client instance and get the current user
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   // If the parent Collection was not specified it creates a collection
   if (!formValues.collectionId) {
     const row: CollectionInsertType = {
@@ -35,19 +53,16 @@ export async function createCollectionServerAction(
     };
     console.log(row);
 
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
     const { data, error } = await supabase
       .from("collections")
       .insert({ ...row, user_id: user?.id })
-      .select();
+      .select()
+      .single();
 
     if (error) {
+      console.error(error);
       return parseServerActionResponse({
-        error: error,
+        error: "An unexpected error occurred",
         data: "",
         status: "ERROR",
       });
@@ -56,10 +71,12 @@ export async function createCollectionServerAction(
     revalidatePath("/home", "layout");
     return parseServerActionResponse({
       error: "",
-      data: data[0],
+      data: data,
       status: "SUCCESS",
     });
   }
+
+  // If the parent Collection was specified it creates a subcollection
   const row: SubCollectionInsertType = {
     name: formValues.name,
     icon: formValues.icon,
@@ -67,15 +84,26 @@ export async function createCollectionServerAction(
   };
   console.log(row);
 
-  const supabase = await createClient();
+  const hasCollection = await doesUserOwnThisCollection(row.collection_id);
+  if (!hasCollection) {
+    return parseServerActionResponse({
+      error:
+        "You do not have permission to create a subcollection in this collection",
+      data: "",
+      status: "ERROR",
+    });
+  }
+
   const { data, error } = await supabase
     .from("sub_collections")
     .insert(row)
-    .select();
+    .select()
+    .single();
 
   if (error) {
+    console.error(error);
     return parseServerActionResponse({
-      error: error,
+      error: "An unexpected Error Occurred",
       data: "",
       status: "ERROR",
     });
@@ -84,7 +112,7 @@ export async function createCollectionServerAction(
 
   return parseServerActionResponse({
     error: "",
-    data: data[0],
+    data: data,
     status: "SUCCESS",
   });
 }

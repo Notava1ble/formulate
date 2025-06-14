@@ -1,3 +1,5 @@
+import { NoteType } from "./db/notes";
+
 export type Json =
   | string
   | number
@@ -41,6 +43,7 @@ export type Database = {
           sub_collection_id: number;
           symbols: Json;
           theory: string;
+          user_id: string | null;
         };
         Insert: {
           id?: number;
@@ -49,6 +52,7 @@ export type Database = {
           sub_collection_id: number;
           symbols?: Json;
           theory: string;
+          user_id?: string | null;
         };
         Update: {
           id?: number;
@@ -57,6 +61,7 @@ export type Database = {
           sub_collection_id?: number;
           symbols?: Json;
           theory?: string;
+          user_id?: string | null;
         };
         Relationships: [
           {
@@ -105,7 +110,16 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
-      [_ in never]: never;
+      get_user_and_collections: {
+        Args: Record<PropertyKey, never>;
+        Returns: {
+          collections: Database["public"]["Tables"]["collections"]["Row"][];
+          sub_collections: Database["public"]["Tables"]["sub_collections"]["Row"][];
+          notes: NoteType[];
+          premade_collections: Database["public"]["Tables"]["collections"]["Row"][];
+          premade_sub_collections: Database["public"]["Tables"]["sub_collections"]["Row"][];
+        }[];
+      };
     };
     Enums: {
       [_ in never]: never;

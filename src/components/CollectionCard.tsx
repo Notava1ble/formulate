@@ -9,13 +9,11 @@ const CollectionCard = ({
   collection,
   parentId,
   isPremade,
-  allUserCollections,
   href,
 }: {
   collection: CollectionType | SubCollectionType;
   parentId?: number;
   isPremade: boolean;
-  allUserCollections: CollectionType[] | null;
   href: string;
 }) => {
   return (
@@ -25,7 +23,7 @@ const CollectionCard = ({
         className="p-6 py-8 flex justify-start items-center gap-8 animate-fade-in"
       >
         <div>
-          <Icon iconName={collection.icon} />
+          <Icon iconName={collection.icon} className="size-20" />
         </div>
         <div>
           <h1 className="text-3xl font-poppins font-bold">{collection.name}</h1>
@@ -33,11 +31,7 @@ const CollectionCard = ({
       </Link>
 
       {!isPremade && (
-        <CollectionCardOptions
-          collection={collection}
-          parentId={parentId}
-          allUserCollections={allUserCollections}
-        />
+        <CollectionCardOptions collection={collection} parentId={parentId} />
       )}
     </div>
   );

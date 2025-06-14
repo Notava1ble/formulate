@@ -3,6 +3,8 @@ import { cookies } from "next/headers";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import AppSidebar from "@/components/AppSidebar";
 import Navbar from "@/components/Navbar";
+import { getUserData } from "@/lib/data";
+import { SessionDataProvider } from "@/providers/session-data-provider";
 
 export default async function Layout({
   children,
@@ -15,13 +17,17 @@ export default async function Layout({
     ? cookieSidebarState.value === "true"
     : true;
 
+  const allUserData = await getUserData();
+
   return (
-    <SidebarProvider defaultOpen={defaultOpen}>
-      <AppSidebar />
-      <main className="relative w-full">
-        <Navbar />
-        {children}
-      </main>
-    </SidebarProvider>
+    <SessionDataProvider initialData={allUserData}>
+      <SidebarProvider defaultOpen={defaultOpen}>
+        <AppSidebar />
+        <main className="relative w-full">
+          <Navbar />
+          {children}
+        </main>
+      </SidebarProvider>
+    </SessionDataProvider>
   );
 }

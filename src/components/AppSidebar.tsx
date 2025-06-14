@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Sidebar,
   SidebarContent,
@@ -10,34 +12,27 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import {
-  getCollectionsForUserId,
-  getPremadeCollections,
-} from "@/supabase/db/collection";
 
 import { ChevronUp, House, Plus, User2 } from "lucide-react";
 import Link from "next/link";
-import CollectionSidebarItem from "./CollectionSidebarItem";
-import { getAllSubCollections } from "@/supabase/db/subCollection";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { getUser } from "@/supabase/db/user";
-import { Avatar, AvatarFallback } from "./ui/avatar";
-import { AvatarImage } from "@radix-ui/react-avatar";
+import { useSessionData } from "@/providers/session-data-provider";
+import CollectionSidebarItem from "./CollectionSidebarItem";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
-export default async function AppSidebar() {
-  const [collections, userCollections, sub_collections, user] =
-    await Promise.all([
-      getPremadeCollections(),
-      getCollectionsForUserId(),
-      getAllSubCollections(),
-      getUser(),
-    ]);
-
+export default function AppSidebar() {
+  const {
+    collections,
+    subCollections,
+    premadeCollections,
+    premadeSubCollections,
+    user,
+  } = useSessionData();
   return (
     <Sidebar variant="floating" collapsible="offcanvas">
       <SidebarHeader>
@@ -68,39 +63,43 @@ export default async function AppSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
-        {userCollections && userCollections.length >= 1 && (
+
+        {/* User created sidebar group */}
+        {collections && collections.length >= 1 && (
           <SidebarGroup>
             <SidebarGroupLabel>Your Collections</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
-                {userCollections &&
-                  userCollections.map((collection) => {
-                    const subCollectionsForCollection = sub_collections
-                      ? sub_collections.filter(
-                          (sub_collection) =>
-                            sub_collection.collection_id == collection.id
-                        )
-                      : [];
-                    return (
-                      <CollectionSidebarItem
-                        collection={collection}
-                        sub_collections={subCollectionsForCollection}
-                        key={collection.id}
-                      />
-                    );
-                  })}
+                {collections.map((collection) => {
+                  const subCollectionsForCollection = subCollections
+                    ? subCollections.filter(
+                        (sub_collection) =>
+                          sub_collection.collection_id == collection.id
+                      )
+                    : [];
+                  // console.log(collection, subCollectionsForCollection);
+                  return (
+                    <CollectionSidebarItem
+                      collection={collection}
+                      sub_collections={subCollectionsForCollection}
+                      key={collection.id}
+                    />
+                  );
+                })}
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>
         )}
-        <SidebarGroup>
-          <SidebarGroupLabel>Premade Collections</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {collections &&
-                collections.map((collection) => {
-                  const subCollectionsForCollection = sub_collections
-                    ? sub_collections.filter(
+
+        {/* Premade sidebar group */}
+        {premadeCollections && premadeCollections.length >= 1 && (
+          <SidebarGroup>
+            <SidebarGroupLabel>Premade Collections</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {premadeCollections.map((collection) => {
+                  const subCollectionsForCollection = premadeSubCollections
+                    ? premadeSubCollections.filter(
                         (sub_collection) =>
                           sub_collection.collection_id == collection.id
                       )
@@ -113,10 +112,13 @@ export default async function AppSidebar() {
                     />
                   );
                 })}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        )}
       </SidebarContent>
+
+      {/* SIDEBAR FOOTER */}
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>

@@ -1,15 +1,11 @@
-import {
-  getCollectionsForUserId,
-  getPremadeCollections,
-} from "@/supabase/db/collection";
+"use client";
+
 import CollectionCard from "../../components/CollectionCard";
 import { cn } from "@/lib/utils";
+import { useSessionData } from "@/providers/session-data-provider";
 
-const CardList = async () => {
-  const [premadeCollections, userCollections] = await Promise.all([
-    getPremadeCollections(),
-    getCollectionsForUserId(),
-  ]);
+const CardList = () => {
+  const { premadeCollections, collections: userCollections } = useSessionData();
 
   const areThereAnyUserCollections =
     userCollections && userCollections.length > 0;
@@ -33,7 +29,6 @@ const CardList = async () => {
                     collection={collection}
                     isPremade={false}
                     href={`/home/${collection.id}`}
-                    allUserCollections={userCollections}
                   />
                 );
               })}
@@ -61,7 +56,6 @@ const CardList = async () => {
                   collection={collection}
                   isPremade={true}
                   href={`/home/${collection.id}`}
-                  allUserCollections={userCollections}
                 />
               );
             })}

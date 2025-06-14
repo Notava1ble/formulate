@@ -13,6 +13,7 @@ export interface NoteType {
     symbol: string;
     explanation: string;
   }>;
+  user_id: string;
 }
 
 export async function getNoteById(id: string): Promise<NoteType | null> {
@@ -55,4 +56,23 @@ export async function getNotesBySubCollectionId(
   if (error) return null;
 
   return notes as NoteType[];
+}
+
+export async function getNotesForUserId() {
+  const supabase = await createClient();
+  const userId = (await supabase.auth.getUser()).data.user?.id;
+
+  if (userId) {
+    const { data: notes, error } = await supabase
+      .from("notes")
+      .select("*")
+      .eq("user_id", userId);
+    //TODO: handle errors better
+    if (error) {
+      return null;
+    }
+
+    return notes as NoteType[];
+  }
+  return null;
 }

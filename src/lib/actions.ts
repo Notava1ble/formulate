@@ -2,6 +2,8 @@
 
 import { createClient } from "@/supabase/server";
 import { revalidatePath } from "next/cache";
+import { deleteCollectionSchema, nameEditSchema } from "./validation";
+import { parseServerActionResponse } from "./utils";
 
 interface formValuesType {
   name: string;
@@ -20,6 +22,17 @@ export const updateCollectionNameAction = async (
 ): Promise<rType> => {
   const supabase = await createClient();
 
+  // Validate the form values on the server for security and consistency
+  const validation = nameEditSchema.safeParse(formValues);
+  if (!validation.success) {
+    console.error("Validation Error:", validation.error);
+    return parseServerActionResponse({
+      error: "Invalid data provided.",
+      data: "",
+      status: "ERROR",
+    });
+  }
+
   if (formValues.parentId) {
     const { error } = await supabase
       .from("sub_collections")
@@ -27,15 +40,19 @@ export const updateCollectionNameAction = async (
       .eq("id", formValues.collectionId);
 
     if (error) {
-      return { error: error.message, data: "", status: "ERROR" };
+      return parseServerActionResponse({
+        error: "Failed to update subcollection",
+        data: "",
+        status: "ERROR",
+      });
     }
 
-    revalidatePath(`/home/${formValues.collectionId}/${formValues.parentId}`);
-    return {
+    revalidatePath("/home", "layout");
+    return parseServerActionResponse({
       error: "",
       data: "Subcollection updated successfully",
       status: "SUCCESS",
-    };
+    });
   }
 
   const { error } = await supabase
@@ -44,22 +61,39 @@ export const updateCollectionNameAction = async (
     .eq("id", formValues.collectionId);
 
   if (error) {
-    return { error: error.message, data: "", status: "ERROR" };
+    return parseServerActionResponse({
+      error: "Failed to update collection",
+      data: "",
+      status: "ERROR",
+    });
   }
 
-  revalidatePath(`/home/${formValues.collectionId}`);
-  return {
+  revalidatePath("/home", "layout");
+  return parseServerActionResponse({
     error: "",
     data: "Collection updated successfully",
     status: "SUCCESS",
-  };
+  });
 };
 
+// Function to delete a collection or subcollection
 export const deleteCollectionAction = async (
   collectionId: number,
   parentId?: number
 ): Promise<rType> => {
-  "use server";
+  const validation = deleteCollectionSchema.safeParse({
+    collectionId,
+    parentId,
+  });
+  if (!validation.success) {
+    console.error("Validation Error:", validation.error);
+    return parseServerActionResponse({
+      error: "Invalid data provided.",
+      data: "",
+      status: "ERROR",
+    });
+  }
+
   const supabase = await createClient();
   if (parentId) {
     const { error } = await supabase
@@ -68,15 +102,19 @@ export const deleteCollectionAction = async (
       .eq("id", collectionId);
 
     if (error) {
-      return { error: error.message, data: "", status: "ERROR" };
+      return parseServerActionResponse({
+        error: "Failed to delete subcollection",
+        data: "",
+        status: "ERROR",
+      });
     }
 
-    revalidatePath(`/home/${collectionId}`);
-    return {
+    revalidatePath("/home", "layout");
+    return parseServerActionResponse({
       error: "",
       data: "Subcollection deleted successfully",
       status: "SUCCESS",
-    };
+    });
   }
 
   const { error } = await supabase
@@ -85,13 +123,17 @@ export const deleteCollectionAction = async (
     .eq("id", collectionId);
 
   if (error) {
-    return { error: error.message, data: "", status: "ERROR" };
+    return parseServerActionResponse({
+      error: "Failed to delete collection",
+      data: "",
+      status: "ERROR",
+    });
   }
-  revalidatePath("/home");
-  revalidatePath(`/home/${collectionId}`);
-  return {
+
+  revalidatePath("/home", "layout");
+  return parseServerActionResponse({
     error: "",
     data: "Collection deleted successfully",
     status: "SUCCESS",
-  };
+  });
 };
