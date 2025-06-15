@@ -58,3 +58,18 @@ export const deleteCollectionSchema = z.object({
   collectionId: z.number().int().positive(),
   parentId: z.number().int().positive().optional(),
 });
+
+export interface FormCollectionEditErrors {
+  name?: string[];
+  newParentId?: string[];
+  collectionId?: string[];
+}
+
+export const collectionEditSchema = z.object({
+  name: z
+    .string()
+    .min(3, { message: "Name must be at least 3 characters long" })
+    .max(32, { message: "Name must be at most 32 characters long" }),
+  parentId: z.number().int().positive().optional(),
+  collectionId: z.number().int().positive(),
+});

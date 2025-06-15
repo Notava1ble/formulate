@@ -1,6 +1,6 @@
 "use client";
 
-import { Edit, MoreVertical, Trash } from "lucide-react";
+import { Edit, Edit2, MoreVertical, Trash } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,13 +26,19 @@ import {
 } from "@/components/ui/dialog";
 import { useActionState, useState } from "react";
 import { cn } from "@/lib/utils";
-import { deleteCollectionAction } from "@/lib/actions";
+import { deleteCollectionAction, editCollectionAction } from "@/lib/actions";
 import { Button } from "./ui/button";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { SubCollectionType } from "@/supabase/db/subCollection";
 import { CollectionType } from "@/supabase/db/collection";
 import ParentCollectionSelector from "./ParentCollectionSelector";
+import { useSessionData } from "@/providers/session-data-provider";
+import z from "zod";
+import {
+  collectionEditSchema,
+  FormCollectionEditErrors,
+} from "@/lib/validation";
 
 // TODO: Add a dialog for confirming delete
 const CollectionCardOptions = ({
@@ -42,13 +48,17 @@ const CollectionCardOptions = ({
   collection: CollectionType | SubCollectionType;
   parentId?: number;
 }) => {
+  const [errors, setErrors] = useState<FormCollectionEditErrors>({});
+
   const [open, setOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
+  const { collections } = useSessionData();
+
   const [parentCollection, setParentCollection] = useState<
     CollectionType | undefined
-  >(undefined);
+  >(collections.find((collection) => collection.id === parentId) || undefined);
 
   const handleDelete = async (
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -68,7 +78,62 @@ const CollectionCardOptions = ({
     };
   };
 
-  const [state, formAction, isPending] = useActionState(handleDelete, {
+  const handleEdit = async (
+    prevState: { error: string; status: string },
+    formData: FormData
+  ) => {
+    try {
+      const requestValues = {
+        name: formData.get("name") as string,
+        parentId: parentCollection?.id || undefined,
+        collectionId: collection.id,
+      };
+
+      const validation = await collectionEditSchema.parseAsync(requestValues);
+
+      // TODO: Make the request if the new values are different than the current ones
+      const response = await editCollectionAction(validation);
+
+      console.log(response);
+
+      if (response.status === "SUCCESS") {
+        setIsEditDialogOpen(false);
+        setOpen(false);
+      }
+
+      return {
+        error: response.error,
+        status: response.status,
+      };
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const fieldErorrs = error.flatten().fieldErrors;
+
+        setErrors(fieldErorrs as FormCollectionEditErrors);
+        console.log(fieldErorrs);
+
+        return { ...prevState, error: "Validation failed", status: "ERROR" };
+      }
+      console.log(error);
+
+      return {
+        ...prevState,
+        error: "An unexpected error has occurred",
+        status: "ERROR",
+      };
+    }
+  };
+
+  const [deleteState, deleteAction, isDeletePending] = useActionState(
+    handleDelete,
+    {
+      error: "",
+      status: "INITIAL",
+    }
+  );
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [editState, editAction, isEditPending] = useActionState(handleEdit, {
     error: "",
     status: "INITIAL",
   });
@@ -87,7 +152,7 @@ const CollectionCardOptions = ({
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuItem
-            disabled={isPending}
+            disabled={isDeletePending}
             onClick={() => setIsEditDialogOpen(true)}
           >
             <Edit />
@@ -95,7 +160,7 @@ const CollectionCardOptions = ({
           </DropdownMenuItem>
           <DropdownMenuItem
             variant="destructive"
-            disabled={isPending}
+            disabled={isDeletePending}
             onClick={() => setIsDeleteDialogOpen(true)}
           >
             <Trash />
@@ -108,7 +173,7 @@ const CollectionCardOptions = ({
       <AlertDialog
         open={isDeleteDialogOpen}
         onOpenChange={(open) => {
-          if (!isPending) {
+          if (!isDeletePending) {
             setIsDeleteDialogOpen(open);
           }
         }}
@@ -117,27 +182,27 @@ const CollectionCardOptions = ({
           <AlertDialogHeader>
             <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
             <AlertDialogDescription>
-              {state.status === "ERROR" && state.error
-                ? `Error: ${state.error}`
-                : state.status === "INITIAL" || isPending
+              {deleteState.status === "ERROR" && deleteState.error
+                ? `Error: ${deleteState.error}`
+                : deleteState.status === "INITIAL" || isDeletePending
                 ? `This action cannot be undone. This will permanently delete this
               collection and all of its children.`
-                : state.status === "SUCCESS"
+                : deleteState.status === "SUCCESS"
                 ? "Collection deleted successfully!"
                 : "Preparing to delete..."}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <form action={formAction}>
+            <form action={deleteAction}>
               <Button
                 type="submit"
-                disabled={isPending}
+                disabled={isDeletePending}
                 variant="destructive"
                 className="text-white"
               >
                 <Trash />
-                {isPending ? "Deleting..." : "Delete"}
+                {isDeletePending ? "Deleting..." : "Delete"}
               </Button>
             </form>
           </AlertDialogFooter>
@@ -148,13 +213,13 @@ const CollectionCardOptions = ({
       <Dialog
         open={isEditDialogOpen}
         onOpenChange={(open) => {
-          if (!isPending) {
+          if (!isEditPending) {
             setIsEditDialogOpen(open);
           }
         }}
       >
-        <form>
-          <DialogContent>
+        <DialogContent>
+          <form action={editAction}>
             <DialogHeader>
               <DialogTitle>Edit</DialogTitle>
               <DialogDescription>
@@ -162,10 +227,12 @@ const CollectionCardOptions = ({
               </DialogDescription>
             </DialogHeader>
             <div className="mt-4">
-              <ParentCollectionSelector
-                parentCollection={parentCollection}
-                setParentCollection={setParentCollection}
-              />
+              {parentId && (
+                <ParentCollectionSelector
+                  parentCollection={parentCollection}
+                  setParentCollection={setParentCollection}
+                />
+              )}
               <div className="w-full flex flex-col items-start justify-center gap-2 max-w-md">
                 <Label htmlFor="name">Name</Label>
                 <Input
@@ -173,12 +240,25 @@ const CollectionCardOptions = ({
                   id="name"
                   name="name"
                   defaultValue={collection.name}
+                  className={`${errors.name ? "border-red-500" : ""}`}
                 />
+                <p
+                  className={`text-[12px] min-h-[18px] ${
+                    errors.name ? "text-red-500 visible" : "invisible"
+                  }`}
+                >
+                  {errors.name ? errors.name[0] : "\u00A0"}
+                </p>
               </div>
             </div>
-            <DialogFooter></DialogFooter>
-          </DialogContent>
-        </form>
+            <DialogFooter>
+              <Button type="submit" disabled={isEditPending} variant="default">
+                <Edit2 />
+                {isEditPending ? "Editing..." : "Edit"}
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
       </Dialog>
     </div>
   );
