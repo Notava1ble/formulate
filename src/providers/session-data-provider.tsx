@@ -10,9 +10,10 @@ export interface SessionDataContextType {
   user: User;
   collections: CollectionType[];
   subCollections: SubCollectionType[];
+  notes: NoteType[];
   premadeCollections: CollectionType[];
   premadeSubCollections: SubCollectionType[];
-  notes: NoteType[];
+  premadeNotes: NoteType[];
 }
 
 // Create the context with a default value

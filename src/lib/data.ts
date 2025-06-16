@@ -11,16 +11,18 @@ export async function getUserData(): Promise<SessionDataContextType | null> {
     premade_collections: premadeCollections,
     premade_sub_collections: premadeSubCollections,
     notes,
+    premade_notes: premadeNotes,
   } = data;
 
   // TODO: Make it not break when one of these is false
   console.log(
     userData && "yes",
-    collections && "yes",
-    subCollections && "yes",
-    notes && "yes",
-    premadeCollections && "yes",
-    premadeSubCollections && "yes"
+    collections.length,
+    subCollections.length,
+    notes.length,
+    premadeCollections.length,
+    premadeSubCollections.length,
+    premadeNotes.length
   );
 
   if (userData && data) {
@@ -28,9 +30,10 @@ export async function getUserData(): Promise<SessionDataContextType | null> {
       user: userData,
       collections,
       subCollections,
+      notes,
       premadeCollections,
       premadeSubCollections,
-      notes,
+      premadeNotes,
     };
   }
   return null;

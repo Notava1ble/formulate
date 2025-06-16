@@ -1,10 +1,9 @@
-import { redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 
-import NoteCard from "@/components/NoteCard";
 import { getCollectionById } from "@/supabase/db/collection";
 import { getSubCollectionById } from "@/supabase/db/subCollection";
-import { getNotesBySubCollectionId } from "@/supabase/db/notes";
 import CollectionTitle from "@/components/CollectionTitle";
+import NoteList from "./NoteList";
 
 export default async function Page({
   params,
@@ -18,9 +17,7 @@ export default async function Page({
     getSubCollectionById(subCollectionId),
   ]);
 
-  if (!collection || !sub_collection) redirect("/not-found");
-
-  const notes = await getNotesBySubCollectionId(subCollectionId);
+  if (!collection || !sub_collection) notFound();
 
   return (
     <div className="p-6">
@@ -29,19 +26,7 @@ export default async function Page({
         parentCollection={collection}
       />
       <div className="flex-col-center mt-12">
-        <div className="w-full grid grid-cols-2 gap-8 mt-16 px-4">
-          {notes &&
-            notes.map((note) => {
-              return (
-                <NoteCard
-                  key={note.id}
-                  collection={sub_collection}
-                  note={note}
-                  href={`/home/${collection.id}/${sub_collection.id}/${note.id}`}
-                />
-              );
-            })}
-        </div>
+        <NoteList sub_collection={sub_collection} collection={collection} />
       </div>
     </div>
   );
