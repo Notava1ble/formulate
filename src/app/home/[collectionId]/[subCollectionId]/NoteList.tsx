@@ -6,6 +6,8 @@ import { SubCollectionType } from "@/supabase/db/subCollection";
 
 import { NoteType } from "@/supabase/db/notes";
 import NoteCard from "@/components/NoteCard";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 const NoteList = ({
   sub_collection,
@@ -29,19 +31,27 @@ const NoteList = ({
     );
   }
 
-  return (
+  return notes.length > 0 ? (
     <div className="w-full grid grid-cols-2 gap-8 mt-16 px-4">
-      {notes &&
-        notes.map((note) => {
-          return (
-            <NoteCard
-              key={note.id}
-              collection={sub_collection}
-              note={note}
-              href={`/home/${collection.id}/${sub_collection.id}/${note.id}`}
-            />
-          );
-        })}
+      {notes.map((note) => {
+        return (
+          <NoteCard
+            key={note.id}
+            collection={sub_collection}
+            note={note}
+            href={`/home/${collection.id}/${sub_collection.id}/${note.id}`}
+          />
+        );
+      })}
+    </div>
+  ) : (
+    <div className="w-full flex-col-center mt-8 gap-4">
+      <p className="text-zinc-400">This collection is empty.</p>
+      <Button size="lg" className="text-lg">
+        <Link href={`/home/create/note?subCollectionId=${sub_collection.id}`}>
+          Create a Note
+        </Link>
+      </Button>
     </div>
   );
 };

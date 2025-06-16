@@ -57,7 +57,7 @@ const Icon = ({ iconName, className, ...props }: CustomIconProps) => {
     // You can return null or a placeholder element. A placeholder is often better for layout stability.
     return (
       <Skeleton
-        className={`${className} bg-zinc-900`}
+        className={`${className} bg-zinc-950`}
         style={{ width: props.size, height: props.size }}
       />
     );
