@@ -7,7 +7,8 @@ import { SubCollectionType } from "@/supabase/db/subCollection";
 import { NoteType } from "@/supabase/db/notes";
 import NoteCard from "@/components/NoteCard";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { createUntitledNoteAction } from "./createUntitledNoteAction";
+import { useRouter } from "next/navigation";
 
 const NoteList = ({
   sub_collection,
@@ -17,6 +18,7 @@ const NoteList = ({
   collection: CollectionType;
 }) => {
   const { notes: allUserNotes, premadeNotes } = useSessionData();
+  const router = useRouter();
 
   let notes: NoteType[];
   if (sub_collection.user_id === null) {
@@ -45,12 +47,23 @@ const NoteList = ({
       })}
     </div>
   ) : (
-    <div className="w-full flex-col-center mt-8 gap-4">
+    <div className="w-full flex-col-center mt-8 gap-6">
       <p className="text-zinc-400">This collection is empty.</p>
-      <Button size="lg" className="text-lg">
-        <Link href={`/home/create/note?subCollectionId=${sub_collection.id}`}>
-          Create a Note
-        </Link>
+      <Button
+        size="lg"
+        className="text-lg"
+        onClick={async () => {
+          const response = await createUntitledNoteAction(sub_collection.id);
+          if (response.status === "SUCCESS") {
+            router.push(
+              `/home/${collection.id}/${sub_collection.id}/${response.data}`
+            );
+          } else {
+            console.error("Failed to create note:", response.error);
+          }
+        }}
+      >
+        Create a Note
       </Button>
     </div>
   );

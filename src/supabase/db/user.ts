@@ -45,3 +45,24 @@ export async function doesUserOwnThisCollection(collectionId: number) {
   }
   return true; // The user owns the collection
 }
+
+export async function doesUserOwnThisSubCollection(subCollectionId: number) {
+  const user = await getUser();
+  if (!user) {
+    return false;
+  }
+
+  const supabase = await createClient();
+  const { data: collection, error: checkError } = await supabase
+    .from("sub_collections")
+    .select("id") // We only need to know if it exists, so just select 'id'
+    .eq("id", subCollectionId)
+    .eq("user_id", user.id)
+    .maybeSingle(); // Returns one record or null, but not an error if not found
+
+  if (checkError || !collection) {
+    // If there's an error OR if no collection was found, the user is not authorized
+    return false;
+  }
+  return true; // The user owns the collection
+}
