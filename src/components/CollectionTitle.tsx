@@ -10,6 +10,12 @@ import { SubCollectionType } from "@/supabase/db/subCollection";
 
 import { nameEditSchema } from "@/lib/validation";
 import { FormCollectionNameEditErrors as FormErrors } from "@/lib/validation";
+import { Input } from "./ui/input";
+
+interface StateType {
+  error: string;
+  status: "INITIAL" | "ERROR" | "SUCCESS";
+}
 
 const CollectionTitle = ({
   collection,
@@ -21,8 +27,7 @@ const CollectionTitle = ({
   const [activeForm, setActiveForm] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleFormSubmit = async (prevState: any, formData: FormData) => {
+  const handleFormSubmit = async (prevState: StateType, formData: FormData) => {
     try {
       const name = formData.get("name") as string | undefined;
       if (name == collection.name) {
@@ -31,7 +36,7 @@ const CollectionTitle = ({
           ...prevState,
           error: "Name wasnt changed",
           status: "ERROR",
-        };
+        } as StateType;
       }
 
       const formValues = {
@@ -57,7 +62,7 @@ const CollectionTitle = ({
 
       setActiveForm(false);
 
-      return result;
+      return result as StateType;
     } catch (error) {
       if (error instanceof z.ZodError) {
         const fieldErorrs = error.flatten().fieldErrors;
@@ -65,7 +70,11 @@ const CollectionTitle = ({
         setErrors(fieldErorrs as FormErrors);
         console.log(fieldErorrs);
 
-        return { ...prevState, error: "Validation failed", status: "ERROR" };
+        return {
+          ...prevState,
+          error: "Validation failed",
+          status: "ERROR",
+        } as StateType;
       }
       console.log(error);
 
@@ -73,22 +82,25 @@ const CollectionTitle = ({
         ...prevState,
         error: "An unexpected error has occurred",
         status: "ERROR",
-      };
+      } as StateType;
     }
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [state, formAction, isPending] = useActionState(handleFormSubmit, {
-    error: "",
-    status: "INITIAL",
-  });
+  const [state, formAction, isPending] = useActionState<StateType, FormData>(
+    handleFormSubmit,
+    {
+      error: "",
+      status: "INITIAL",
+    }
+  );
 
   if (activeForm) {
     return (
       <div className="w-full flex items-end justify-center p-24 pt-29">
-        <form className="group flex-center relative" action={formAction}>
-          <input
-            className="w-min border-b-1 border-zinc-700 text-6xl font-semibold font-poppins outline-none focus:outline-none"
+        <form className="flex-center relative" action={formAction}>
+          <Input
+            className="text-lg"
             defaultValue={collection.name}
             type="name"
             id="name"
@@ -103,7 +115,7 @@ const CollectionTitle = ({
             variant="link"
             size="iconLg"
             type="submit"
-            className="absolute -right-12 bottom-2 opacity-0 group-hover:opacity-100 transition-oppacity"
+            className="absolute -right-12 bottom-0 opacity-100 transition-oppacity"
             disabled={isPending}
           >
             {isPending ? (
