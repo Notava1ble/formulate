@@ -1,5 +1,5 @@
-import { NoteType } from "@/lib/supabase/notes";
-import { SubCollectionType } from "@/lib/supabase/subCollection";
+import { NoteType } from "@/supabase/db/notes";
+import { SubCollectionType } from "@/supabase/db/subCollection";
 import Link from "next/link";
 import Icon from "./Icon";
 
@@ -18,7 +18,7 @@ const NoteCard = ({
       className="bg-zinc-800 rounded-md p-6 py-8 flex justify-start items-center gap-8 hover:scale-102 transition-all"
     >
       <div>
-        <Icon iconName={collection.icon} />
+        <Icon iconName={collection.icon} className="size-20" />
       </div>
       <div>
         <h1 className="text-3xl font-poppins font-bold">{note.name}</h1>

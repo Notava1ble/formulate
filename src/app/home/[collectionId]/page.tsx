@@ -1,8 +1,9 @@
-import { redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 
 import CollectionCard from "@/components/CollectionCard";
-import { getCollectionById } from "@/lib/supabase/collection";
-import { getSubCollectionsByCollectionId } from "@/lib/supabase/subCollection";
+import { getCollectionById } from "@/supabase/db/collection";
+import { getSubCollectionsByCollectionId } from "@/supabase/db/subCollection";
+import CollectionTitle from "@/components/CollectionTitle";
 
 export default async function Page({
   params,
@@ -17,16 +18,12 @@ export default async function Page({
     getSubCollectionsByCollectionId(collectionId),
   ]);
 
-  if (!collection) redirect("/not-found");
+  if (!collection) notFound();
 
   return (
     <div className="p-6">
-      <div className=" w-full flex-center p-24 pt-32">
-        <h1 className="text-6xl font-semibold font-poppins">
-          {collection.name}
-        </h1>
-      </div>
-      <div className="flex-col-center mt-12">
+      <CollectionTitle collection={collection} />
+      <div className="flex-col-center mt-8">
         <div className="w-full grid grid-cols-2 gap-8 mt-16 px-4">
           {sub_collections &&
             sub_collections.map((subC) => {
@@ -34,6 +31,8 @@ export default async function Page({
                 <CollectionCard
                   key={subC.id}
                   collection={subC}
+                  isPremade={collection.user_id === null}
+                  parentId={collection.id}
                   href={`/home/${collection.id}/${subC.id}`}
                 />
               );

@@ -1,9 +1,10 @@
-import { redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 
-import NoteCard from "@/components/NoteCard";
-import { getCollectionById } from "@/lib/supabase/collection";
-import { getSubCollectionById } from "@/lib/supabase/subCollection";
-import { getNotesBySubCollectionId } from "@/lib/supabase/notes";
+import { getCollectionById } from "@/supabase/db/collection";
+import { getSubCollectionById } from "@/supabase/db/subCollection";
+import CollectionTitle from "@/components/CollectionTitle";
+import NoteList from "./NoteList";
+import AddNoteButton from "@/components/AddNoteButton";
 
 export default async function Page({
   params,
@@ -17,31 +18,23 @@ export default async function Page({
     getSubCollectionById(subCollectionId),
   ]);
 
-  if (!collection || !sub_collection) redirect("/not-found");
-
-  const notes = await getNotesBySubCollectionId(subCollectionId);
+  if (!collection || !sub_collection) notFound();
 
   return (
     <div className="p-6">
-      <div className=" w-full flex-center p-24 pt-32">
-        <h1 className="text-6xl font-semibold font-poppins">
-          {sub_collection.name}
-        </h1>
-      </div>
-      <div className="flex-col-center mt-12">
-        <div className="w-full grid grid-cols-2 gap-8 mt-16 px-4">
-          {notes &&
-            notes.map((note) => {
-              return (
-                <NoteCard
-                  key={note.id}
-                  collection={sub_collection}
-                  note={note}
-                  href={`/home/${collection.id}/${sub_collection.id}/${note.id}`}
-                />
-              );
-            })}
+      <CollectionTitle
+        collection={sub_collection}
+        parentCollection={collection}
+      />
+      <div className="flex-col-center mt-10">
+        <div className="w-full flex justify-start px-4">
+          <AddNoteButton
+            collectionId={collection.id}
+            subCollectionId={sub_collection.id}
+            variant="outline"
+          />
         </div>
+        <NoteList sub_collection={sub_collection} collection={collection} />
       </div>
     </div>
   );

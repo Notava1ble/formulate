@@ -1,7 +1,5 @@
 import SearchBar from "@/components/SearchBar";
-import { Suspense } from "react";
 import CardList from "@/app/home/MainCardList";
-import LoadingCards from "@/components/LoadingCards";
 
 const Page = async ({
   searchParams,
@@ -24,14 +22,7 @@ const Page = async ({
       <SearchBar query={query} />
 
       {/* Content Page */}
-      <div className="flex-col-center mt-36">
-        {/* <h2 className="text-2xl font-poppins font-medium">
-          ---Look out some premade Collections---
-        </h2> */}
-        <Suspense fallback={<LoadingCards />}>
-          <CardList />
-        </Suspense>
-      </div>
+      <CardList />
     </div>
   );
 };

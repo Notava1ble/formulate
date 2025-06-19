@@ -1,0 +1,101 @@
+import { Database } from "../schema";
+import { createClient } from "../server";
+
+export type SubCollectionType =
+  Database["public"]["Tables"]["sub_collections"]["Row"];
+export type SubCollectionInsertType =
+  Database["public"]["Tables"]["sub_collections"]["Insert"];
+export type SubCollectionUpdateType =
+  Database["public"]["Tables"]["sub_collections"]["Update"];
+
+export async function getSubCollectionById(
+  id: string
+): Promise<SubCollectionType | null> {
+  const supabase = await createClient();
+
+  const numericId = Number(id);
+  if (isNaN(numericId)) {
+    return null;
+  }
+
+  const { data: sub_collection, error } = await supabase
+    .from("sub_collections")
+    .select("*")
+    .eq("id", numericId)
+    .single();
+  //TODO: handle errors better
+  if (error) {
+    return null;
+  }
+
+  return sub_collection as SubCollectionType;
+}
+
+export async function getSubCollectionsByCollectionId(
+  collectionId: string
+): Promise<SubCollectionType[] | null> {
+  const supabase = await createClient();
+
+  const numericId = Number(collectionId);
+  if (isNaN(numericId)) {
+    return null;
+  }
+
+  const { data: sub_collection, error } = await supabase
+    .from("sub_collections")
+    .select("*")
+    .eq("collection_id", numericId);
+
+  // TODO: Handle Errors better
+  if (error) return null;
+
+  return sub_collection as SubCollectionType[];
+}
+
+export async function getAllSubCollections(): Promise<
+  SubCollectionType[] | null
+> {
+  const supabase = await createClient();
+  const { data: sub_collections, error } = await supabase
+    .from("sub_collections")
+    .select("*");
+  //TODO: handle errors better
+  if (error) {
+    return null;
+  }
+  return sub_collections as SubCollectionType[];
+}
+
+export async function getSubCollectionsForUserId() {
+  const supabase = await createClient();
+  const userId = (await supabase.auth.getUser()).data.user?.id;
+
+  if (userId) {
+    const { data: subCollections, error } = await supabase
+      .from("sub_collections")
+      .select("*")
+      .eq("user_id", userId);
+    //TODO: handle errors better
+    if (error) {
+      return null;
+    }
+
+    return subCollections as SubCollectionType[];
+  }
+  return null;
+}
+
+export async function getPremadeSubCollections() {
+  const supabase = await createClient();
+
+  const { data: subCollections, error } = await supabase
+    .from("sub_collections")
+    .select("*")
+    .is("user_id", null);
+  //TODO: handle errors better
+  if (error) {
+    return null;
+  }
+
+  return subCollections as SubCollectionType[];
+}

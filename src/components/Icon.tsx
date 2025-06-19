@@ -1,6 +1,9 @@
-import dynamic from "next/dynamic";
-import { LucideProps } from "lucide-react";
+"use client";
+
+import { useState, useEffect, memo } from "react";
+import { LucideProps, Circle } from "lucide-react"; // Import a default fallback icon
 import dynamicIconImports from "lucide-react/dynamicIconImports";
+import { Skeleton } from "./ui/skeleton";
 
 const pascalToKebabCase = (str: string): string => {
   if (!str) return "";
@@ -16,29 +19,52 @@ interface CustomIconProps extends Omit<LucideProps, "name"> {
 }
 
 const Icon = ({ iconName, className, ...props }: CustomIconProps) => {
-  const kebabCaseName = pascalToKebabCase(
-    iconName
-  ) as keyof typeof dynamicIconImports;
+  const [LoadedIcon, setLoadedIcon] =
+    useState<React.ComponentType<LucideProps> | null>(null);
 
-  const fallbackIconKey = "circle" as keyof typeof dynamicIconImports;
+  useEffect(() => {
+    const kebabCaseName = pascalToKebabCase(
+      iconName
+    ) as keyof typeof dynamicIconImports;
+    const importer = dynamicIconImports[kebabCaseName];
 
-  let TargetIcon;
-
-  if (iconName && dynamicIconImports[kebabCaseName]) {
-    // console.log(`icon "${kebabCaseName}" found`);
-    TargetIcon = dynamic(dynamicIconImports[kebabCaseName]);
-  } else {
-    // Log a warning if a specific iconName was provided but not found (and it's not already the fallback)
-    if (iconName && iconName.toLowerCase() !== "circle") {
-      console.warn(
-        `Icon "${iconName}" (attempted as "${kebabCaseName}") not found. Falling back to "circle" icon.`
-      );
+    if (importer) {
+      importer()
+        .then((mod) => {
+          // The dynamically imported module has a 'default' export which is the icon component
+          setLoadedIcon(() => mod.default);
+        })
+        .catch((err) => {
+          // Handle potential import errors
+          console.error(`Failed to load icon: ${iconName}`, err);
+          setLoadedIcon(() => Circle); // Fallback on error
+        });
+    } else {
+      // If the icon name is not found in the dynamic imports map
+      if (iconName && iconName.toLowerCase() !== "circle") {
+        console.warn(
+          `Icon "${iconName}" not found. Falling back to "circle" icon.`
+        );
+      }
+      setLoadedIcon(() => Circle); // Set fallback immediately
     }
-    TargetIcon = dynamic(dynamicIconImports[fallbackIconKey]);
+  }, [iconName]); // 2. Re-run this effect only when the iconName prop changes
+
+  // 3. Render a fallback while loading or if it fails, ensuring no server/client mismatch.
+  //    On initial render, LoadedIcon is null, so this returns a placeholder.
+  //    This prevents hydration errors.
+  if (!LoadedIcon) {
+    // You can return null or a placeholder element. A placeholder is often better for layout stability.
+    return (
+      <Skeleton
+        className={`${className} bg-zinc-950`}
+        style={{ width: props.size, height: props.size }}
+      />
+    );
   }
 
-  // Apply the provided className or the default "size-20"
-  return <TargetIcon className={className || "size-20"} {...props} />;
+  return <LoadedIcon className={className} {...props} />;
 };
 
-export default Icon;
+// Use memo to prevent re-renders if props haven't changed
+export default memo(Icon);

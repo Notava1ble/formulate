@@ -9,9 +9,9 @@ import remarkGfm from "remark-gfm";
 import "katex/dist/katex.min.css";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { ChevronRight } from "lucide-react";
-import { getCollectionById } from "@/lib/supabase/collection";
-import { getSubCollectionById } from "@/lib/supabase/subCollection";
-import { getNoteById } from "@/lib/supabase/notes";
+import { getCollectionById } from "@/supabase/db/collection";
+import { getSubCollectionById } from "@/supabase/db/subCollection";
+import { getNoteById } from "@/supabase/db/notes";
 
 export default async function Page({
   params,

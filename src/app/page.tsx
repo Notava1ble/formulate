@@ -1,6 +1,6 @@
 import MainNavbar from "@/components/MainNavbar";
 import { Button } from "@/components/ui/button";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/supabase/server";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 

@@ -1,4 +1,4 @@
-import { createClient } from "./server";
+import { createClient } from "../server";
 
 export interface NoteType {
   id: number;
@@ -13,14 +13,21 @@ export interface NoteType {
     symbol: string;
     explanation: string;
   }>;
+  user_id: string;
 }
 
 export async function getNoteById(id: string): Promise<NoteType | null> {
   const supabase = await createClient();
+
+  const numericId = Number(id);
+  if (isNaN(numericId)) {
+    return null;
+  }
+
   const { data: note, error } = await supabase
     .from("notes")
     .select("*")
-    .eq("id", id)
+    .eq("id", numericId)
     .single();
   //TODO: handle errors better
   if (error) {
@@ -35,13 +42,37 @@ export async function getNotesBySubCollectionId(
 ): Promise<NoteType[] | null> {
   const supabase = await createClient();
 
+  const numericId = Number(subCollectionId);
+  if (isNaN(numericId)) {
+    return null;
+  }
+
   const { data: notes, error } = await supabase
     .from("notes")
     .select("*")
-    .eq("sub_collection_id", subCollectionId);
+    .eq("sub_collection_id", numericId);
 
   // TODO: Handle Errors better
   if (error) return null;
 
-  return notes as NoteType[] | null;
+  return notes as NoteType[];
+}
+
+export async function getNotesForUserId() {
+  const supabase = await createClient();
+  const userId = (await supabase.auth.getUser()).data.user?.id;
+
+  if (userId) {
+    const { data: notes, error } = await supabase
+      .from("notes")
+      .select("*")
+      .eq("user_id", userId);
+    //TODO: handle errors better
+    if (error) {
+      return null;
+    }
+
+    return notes as NoteType[];
+  }
+  return null;
 }
