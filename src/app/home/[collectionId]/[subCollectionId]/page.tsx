@@ -4,6 +4,7 @@ import { getCollectionById } from "@/supabase/db/collection";
 import { getSubCollectionById } from "@/supabase/db/subCollection";
 import CollectionTitle from "@/components/CollectionTitle";
 import NoteList from "./NoteList";
+import AddNoteButton from "@/components/AddNoteButton";
 
 export default async function Page({
   params,
@@ -25,7 +26,14 @@ export default async function Page({
         collection={sub_collection}
         parentCollection={collection}
       />
-      <div className="flex-col-center mt-12">
+      <div className="flex-col-center mt-10">
+        <div className="w-full flex justify-start px-4">
+          <AddNoteButton
+            collectionId={collection.id}
+            subCollectionId={sub_collection.id}
+            variant="outline"
+          />
+        </div>
         <NoteList sub_collection={sub_collection} collection={collection} />
       </div>
     </div>
